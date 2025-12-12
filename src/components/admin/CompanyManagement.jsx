@@ -24,7 +24,7 @@ function CompanyManagement() {
 
     const fetchCompanies = async () => {
         try {
-            const response = await axios.get('/api/companies/all')
+            const response = await axios.get('https://api.jobfresh.in/api/companies/all')
             setCompanies(response.data)
             setLoading(false)
             // Fetch job counts after companies are loaded
@@ -37,7 +37,7 @@ function CompanyManagement() {
 
     const fetchJobCountsWithCompanies = async (companiesList) => {
         try {
-            const response = await axios.get('/api/jobs?size=1000')
+            const response = await axios.get('https://api.jobfresh.in/api/jobs?size=1000')
             console.log('Fetched jobs for counting:', response.data.content.length, 'jobs')
 
             // Build a map: company name -> company id
@@ -62,7 +62,7 @@ function CompanyManagement() {
 
     const fetchJobCounts = async () => {
         try {
-            const response = await axios.get('/api/jobs?size=1000')
+            const response = await axios.get('https://api.jobfresh.in/api/jobs?size=1000')
             console.log('Fetched jobs for counting:', response.data.content.length, 'jobs')
 
             // Build a map: company name -> company id
@@ -105,7 +105,7 @@ function CompanyManagement() {
 
         // Fetch jobs for this company
         try {
-            const response = await axios.get('/api/jobs?size=1000')
+            const response = await axios.get('https://api.jobfresh.in/api/jobs?size=1000')
             const jobs = response.data.content.filter(job => job.companyName === companyName)
             setCompanyJobs(prev => ({
                 ...prev,
@@ -130,11 +130,11 @@ function CompanyManagement() {
         try {
             if (editingCompany) {
                 console.log('Updating company:', editingCompany.id)
-                await axios.put(`/api/companies/${editingCompany.id}`, formData)
+                await axios.put(`https://api.jobfresh.in/api/companies/${editingCompany.id}`, formData)
                 alert('Company updated!')
             } else {
                 console.log('Creating new company')
-                await axios.post('/api/companies', formData)
+                await axios.post('https://api.jobfresh.in/api/companies', formData)
                 alert('Company created!')
             }
             setShowForm(false)
@@ -185,7 +185,7 @@ function CompanyManagement() {
 
         console.log('User confirmed - Sending DELETE to /api/companies/' + id)
         try {
-            const response = await axios.delete(`/api/companies/${id}`)
+            const response = await axios.delete(`https://api.jobfresh.in/api/companies/${id}`)
             console.log('DELETE SUCCESS:', response)
             alert(`${name} deleted successfully!`)
             fetchCompanies()

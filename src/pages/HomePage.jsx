@@ -22,7 +22,7 @@ function HomePage() {
             setLoading(true)
             const timestamp = new Date().getTime()
             // Fetch all jobs - no backend pagination
-            const response = await axios.get(`/api/jobs?size=1000&_t=${timestamp}`)
+            const response = await axios.get(`https://api.jobfresh.in/api/jobs?size=1000&_t=${timestamp}`)
             setJobs(response.data.content)
             setLoading(false)
         } catch (error) {
@@ -34,7 +34,7 @@ function HomePage() {
     const fetchCategories = async () => {
         try {
             const timestamp = new Date().getTime()
-            const response = await axios.get(`/api/categories/all?_t=${timestamp}`)
+            const response = await axios.get(`https://api.jobfresh.in/api/categories/all?_t=${timestamp}`)
             setCategories(response.data)
         } catch (error) {
             console.error('Error fetching categories:', error)

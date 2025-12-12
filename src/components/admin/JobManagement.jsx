@@ -29,7 +29,7 @@ function JobManagement() {
 
     const fetchJobs = async () => {
         try {
-            const response = await axios.get('/api/jobs?size=100')
+            const response = await axios.get('https://api.jobfresh.in/api/jobs?size=100')
             setJobs(response.data.content)
             setLoading(false)
         } catch (error) {
@@ -40,7 +40,7 @@ function JobManagement() {
 
     const fetchCompanies = async () => {
         try {
-            const response = await axios.get('/api/companies/all')
+            const response = await axios.get('https://api.jobfresh.in/api/companies/all')
             setCompanies(response.data)
         } catch (error) {
             console.error('Error:', error)
@@ -49,7 +49,7 @@ function JobManagement() {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('/api/categories/all')
+            const response = await axios.get('https://api.jobfresh.in/api/categories/all')
             setCategories(response.data)
         } catch (error) {
             console.error('Error fetching categories:', error)
@@ -76,10 +76,10 @@ function JobManagement() {
             }
 
             if (editingJob) {
-                await axios.put(`/api/jobs/${editingJob.slug}`, payload)
+                await axios.put(`https://api.jobfresh.in/api/jobs/${editingJob.slug}`, payload)
                 alert('Job updated!')
             } else {
-                await axios.post('/api/jobs', payload)
+                await axios.post('https://api.jobfresh.in/api/jobs', payload)
                 alert('Job created!')
             }
 
@@ -96,7 +96,7 @@ function JobManagement() {
     const handleEdit = async (job) => {
         try {
             // Fetch full job details from detail endpoint
-            const response = await axios.get(`/api/jobs/${job.slug}`)
+            const response = await axios.get(`https://api.jobfresh.in/api/jobs/${job.slug}`)
             const fullJob = response.data
 
             setEditingJob(fullJob)
@@ -151,7 +151,7 @@ function JobManagement() {
     const handleDelete = async (slug) => {
         if (!window.confirm('Delete this job?')) return
         try {
-            await axios.delete(`/api/jobs/${slug}`)
+            await axios.delete(`https://api.jobfresh.in/api/jobs/${slug}`)
             alert('Job deleted!')
             fetchJobs()
         } catch (error) {

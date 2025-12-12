@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-// Use environment variable for API URL in production, or proxy in development
-const API_BASE_URL = import.meta.env.VITE_API_URL || ''
+// Production API URL
+const API_BASE_URL = 'https://api.jobfresh.in'
 
 const api = axios.create({
     baseURL: API_BASE_URL,
@@ -39,3 +39,4 @@ api.interceptors.response.use(
 )
 
 export default api
+export { API_BASE_URL }

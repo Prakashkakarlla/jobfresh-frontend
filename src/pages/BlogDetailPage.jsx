@@ -15,7 +15,7 @@ function BlogDetailPage() {
     const fetchBlogDetails = async () => {
         try {
             console.log('Fetching blog with slug:', slug)
-            const response = await axios.get(`/api/blogs/${slug}`)
+            const response = await axios.get(`https://api.jobfresh.in/api/blogs/${slug}`)
             console.log('Blog fetched successfully:', response.data)
             setBlog(response.data)
             setLoading(false)

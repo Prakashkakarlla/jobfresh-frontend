@@ -26,7 +26,7 @@ function CategoryManagement() {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('/api/categories/all')
+            const response = await axios.get('https://api.jobfresh.in/api/categories/all')
             setCategories(response.data)
             setLoading(false)
             // Fetch job counts after categories are loaded
@@ -39,7 +39,7 @@ function CategoryManagement() {
 
     const fetchJobCountsWithCategories = async (categoriesList) => {
         try {
-            const response = await axios.get('/api/jobs?size=1000')
+            const response = await axios.get('https://api.jobfresh.in/api/jobs?size=1000')
 
             // Build a map: category name -> category id
             const categoryNameToId = {}
@@ -78,7 +78,7 @@ function CategoryManagement() {
 
         // Fetch jobs for this category
         try {
-            const response = await axios.get('/api/jobs?size=1000')
+            const response = await axios.get('https://api.jobfresh.in/api/jobs?size=1000')
             const jobs = response.data.content.filter(job => job.categoryName === categoryName)
             setCategoryJobs(prev => ({
                 ...prev,
@@ -101,7 +101,7 @@ function CategoryManagement() {
                 await axios.put(`/ api / categories / ${editingCategory.id} `, formData)
                 alert('Category updated!')
             } else {
-                await axios.post('/api/categories', formData)
+                await axios.post('https://api.jobfresh.in/api/categories', formData)
                 alert('Category created!')
             }
             setShowForm(false)

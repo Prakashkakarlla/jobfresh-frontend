@@ -21,7 +21,7 @@ function BlogCategoryManagement() {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/blog-categories')
+            const response = await axios.get('https://api.jobfresh.in/api/blog-categories')
             setCategories(response.data)
             setLoading(false)
         } catch (err) {
@@ -51,11 +51,11 @@ function BlogCategoryManagement() {
         try {
             if (editingCategory) {
                 await axios.put(
-                    `http://localhost:8080/api/blog-categories/${editingCategory.id}`,
+                    `https://api.jobfresh.in/api/blog-categories/${editingCategory.id}`,
                     formData
                 )
             } else {
-                await axios.post('http://localhost:8080/api/blog-categories', formData)
+                await axios.post('https://api.jobfresh.in/api/blog-categories', formData)
             }
             fetchCategories()
             closeModal()
@@ -79,7 +79,7 @@ function BlogCategoryManagement() {
         if (!window.confirm('Are you sure you want to delete this category?')) return
 
         try {
-            await axios.delete(`http://localhost:8080/api/blog-categories/${id}`)
+            await axios.delete(`https://api.jobfresh.in/api/blog-categories/${id}`)
             fetchCategories()
         } catch (err) {
             setError('Failed to delete category')

@@ -26,7 +26,7 @@ function BlogManagement() {
 
     const fetchPosts = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/blogs')
+            const response = await axios.get('https://api.jobfresh.in/api/blogs')
             setPosts(response.data)
             setLoading(false)
         } catch (error) {
@@ -37,7 +37,7 @@ function BlogManagement() {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/blog-categories')
+            const response = await axios.get('https://api.jobfresh.in/api/blog-categories')
             setCategories(response.data)
         } catch (error) {
             console.error('Error fetching categories:', error)
@@ -53,9 +53,9 @@ function BlogManagement() {
             }
 
             if (editingPost) {
-                await axios.put(`http://localhost:8080/api/blogs/${editingPost.id}`, payload)
+                await axios.put(`https://api.jobfresh.in/api/blogs/${editingPost.id}`, payload)
             } else {
-                await axios.post('http://localhost:8080/api/blogs', payload)
+                await axios.post('https://api.jobfresh.in/api/blogs', payload)
             }
             fetchPosts()
             closeModal()
@@ -84,7 +84,7 @@ function BlogManagement() {
         if (!window.confirm('Are you sure you want to delete this post?')) return
 
         try {
-            await axios.delete(`http://localhost:8080/api/blogs/${id}`)
+            await axios.delete(`https://api.jobfresh.in/api/blogs/${id}`)
             fetchPosts()
         } catch (error) {
             console.error('Error deleting post:', error)

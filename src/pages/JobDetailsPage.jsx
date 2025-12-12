@@ -17,7 +17,7 @@ function JobDetailsPage() {
 
     const fetchJobDetails = async () => {
         try {
-            const response = await axios.get(`/api/jobs/${slug}`)
+            const response = await axios.get(`https://api.jobfresh.in/api/jobs/${slug}`)
             setJob(response.data)
             setLoading(false)
 
@@ -49,7 +49,7 @@ function JobDetailsPage() {
 
     const fetchCompanyDetails = async (companySlug) => {
         try {
-            const response = await axios.get('/api/companies/all')
+            const response = await axios.get('https://api.jobfresh.in/api/companies/all')
             const foundCompany = response.data.find(c => c.slug === companySlug)
             if (foundCompany) {
                 console.log('Found company:', foundCompany)
@@ -64,7 +64,7 @@ function JobDetailsPage() {
 
     const fetchCategoryDetails = async (categorySlug) => {
         try {
-            const response = await axios.get('/api/categories/all')
+            const response = await axios.get('https://api.jobfresh.in/api/categories/all')
             const foundCategory = response.data.find(c => c.slug === categorySlug)
             if (foundCategory) {
                 console.log('Found category:', foundCategory)
@@ -80,7 +80,7 @@ function JobDetailsPage() {
     const fetchRelatedJobs = async (currentJobId, categorySlug, companyName) => {
         try {
             console.log('Fetching related jobs for:', { currentJobId, categorySlug, companyName })
-            const response = await axios.get('/api/jobs?size=100')
+            const response = await axios.get('https://api.jobfresh.in/api/jobs?size=100')
             const allJobs = response.data.content
             console.log('Total jobs fetched:', allJobs.length)
 

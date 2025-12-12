@@ -13,7 +13,7 @@ function BlogPage() {
 
     const fetchBlogs = async () => {
         try {
-            const response = await axios.get('/api/blogs')
+            const response = await axios.get('https://api.jobfresh.in/api/blogs')
             setBlogs(response.data || [])
             setLoading(false)
         } catch (error) {

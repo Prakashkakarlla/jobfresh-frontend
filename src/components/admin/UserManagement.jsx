@@ -27,7 +27,7 @@ export default function UserManagement() {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get('/api/admin/users')
+            const response = await axios.get('https://api.jobfresh.in/api/admin/users')
             setUsers(response.data)
             setLoading(false)
         } catch (error) {
@@ -42,7 +42,7 @@ export default function UserManagement() {
         try {
             if (editingUser) {
                 // Update user
-                await axios.put(`/api/admin/users/${editingUser.id}`, {
+                await axios.put(`https://api.jobfresh.in/api/admin/users/${editingUser.id}`, {
                     firstName: formData.firstName,
                     lastName: formData.lastName,
                     role: formData.role,
@@ -50,7 +50,7 @@ export default function UserManagement() {
                 })
             } else {
                 // Create new user
-                await axios.post('/api/admin/users', formData)
+                await axios.post('https://api.jobfresh.in/api/admin/users', formData)
             }
 
             fetchUsers()
@@ -65,7 +65,7 @@ export default function UserManagement() {
         if (!confirm('Are you sure you want to delete this user?')) return
 
         try {
-            await axios.delete(`/api/admin/users/${id}`)
+            await axios.delete(`https://api.jobfresh.in/api/admin/users/${id}`)
             fetchUsers()
         } catch (error) {
             console.error('Error deleting user:', error)

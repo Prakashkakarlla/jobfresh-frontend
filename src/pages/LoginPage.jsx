@@ -24,7 +24,7 @@ export default function LoginPage() {
         setMessage('')
 
         try {
-            const response = await axios.post('/api/auth/request-otp', { email })
+            const response = await axios.post('https://api.jobfresh.in/api/auth/request-otp', { email })
             setMessage(response.data.message)
             setOtpSent(true)
             setShowOtpInput(true)
@@ -41,7 +41,7 @@ export default function LoginPage() {
         setError('')
 
         try {
-            const response = await axios.post('/api/auth/verify-otp', { email, otp })
+            const response = await axios.post('https://api.jobfresh.in/api/auth/verify-otp', { email, otp })
 
             // Store auth data
             localStorage.setItem('token', response.data.token)
@@ -62,7 +62,7 @@ export default function LoginPage() {
         setError('')
 
         try {
-            const response = await axios.post('/api/auth/login', { email, password })
+            const response = await axios.post('https://api.jobfresh.in/api/auth/login', { email, password })
 
             // Store auth data
             localStorage.setItem('token', response.data.token)
