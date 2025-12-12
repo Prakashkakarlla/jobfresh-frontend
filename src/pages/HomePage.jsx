@@ -110,12 +110,14 @@ function HomePage() {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="search-input"
+                            aria-label="Search jobs"
                         />
 
                         <select
                             value={selectedCategory}
                             onChange={(e) => setSelectedCategory(e.target.value)}
                             className="category-select"
+                            aria-label="Filter by job category"
                         >
                             <option value="">All Categories</option>
                             {categories.map((cat) => (
@@ -139,6 +141,7 @@ function HomePage() {
                         </div>
                     ) : (
                         <>
+                            <h2 className="sr-only">Available Jobs</h2>
                             <div className="job-grid fade-in">
                                 {paginatedJobs.map(job => (
                                     <div
