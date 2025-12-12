@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
+import { SkeletonJobGrid } from '../components/Skeleton'
+import { cache, CACHE_KEYS } from '../utils/cache'
 
 function HomePage() {
     const [jobs, setJobs] = useState([])
@@ -29,11 +31,18 @@ function HomePage() {
 
     const fetchJobs = async () => {
         try {
+            // Check cache first
+            const cachedJobs = cache.get(CACHE_KEYS.JOBS)
+            if (cachedJobs) {
+                setJobs(cachedJobs)
+                setLoading(false)
+                return
+            }
+
             setLoading(true)
-            const timestamp = new Date().getTime()
-            // Fetch all jobs - no backend pagination
-            const response = await axios.get(`https://api.jobfresh.in/api/jobs?size=1000&_t=${timestamp}`)
+            const response = await axios.get('https://api.jobfresh.in/api/jobs?size=1000')
             setJobs(response.data.content)
+            cache.set(CACHE_KEYS.JOBS, response.data.content) // Cache the results
             setLoading(false)
         } catch (error) {
             console.error('Error fetching jobs:', error)
@@ -43,9 +52,16 @@ function HomePage() {
 
     const fetchCategories = async () => {
         try {
-            const timestamp = new Date().getTime()
-            const response = await axios.get(`https://api.jobfresh.in/api/categories/all?_t=${timestamp}`)
+            // Check cache first
+            const cachedCategories = cache.get(CACHE_KEYS.JOB_CATEGORIES)
+            if (cachedCategories) {
+                setCategories(cachedCategories)
+                return
+            }
+
+            const response = await axios.get('https://api.jobfresh.in/api/categories/all')
             setCategories(response.data)
+            cache.set(CACHE_KEYS.JOB_CATEGORIES, response.data) // Cache the results
         } catch (error) {
             console.error('Error fetching categories:', error)
         }
@@ -115,7 +131,7 @@ function HomePage() {
             <section className="jobs-section">
                 <div className="container">
                     {loading ? (
-                        <div className="loading">Loading jobs...</div>
+                        <SkeletonJobGrid count={8} />
                     ) : paginatedJobs.length === 0 ? (
                         <div className="empty-state">
                             <h2>No jobs found</h2>

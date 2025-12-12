@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { SkeletonBlogGrid } from '../components/Skeleton'
+import { cache, CACHE_KEYS } from '../utils/cache'
 
 function BlogPage() {
     const [blogs, setBlogs] = useState([])
@@ -13,8 +15,17 @@ function BlogPage() {
 
     const fetchBlogs = async () => {
         try {
+            // Check cache first
+            const cachedBlogs = cache.get(CACHE_KEYS.BLOG_POSTS)
+            if (cachedBlogs) {
+                setBlogs(cachedBlogs)
+                setLoading(false)
+                return
+            }
+
             const response = await axios.get('https://api.jobfresh.in/api/blogs')
             setBlogs(response.data || [])
+            cache.set(CACHE_KEYS.BLOG_POSTS, response.data || [])
             setLoading(false)
         } catch (error) {
             console.error('Error fetching blogs:', error)
@@ -34,7 +45,7 @@ function BlogPage() {
             <section style={{ padding: '3rem 0' }}>
                 <div className="container">
                     {loading ? (
-                        <div className="loading">Loading articles...</div>
+                        <SkeletonBlogGrid count={6} />
                     ) : blogs.length === 0 ? (
                         <div className="empty-state">
                             <h2>No blog posts yet</h2>
