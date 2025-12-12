@@ -6,6 +6,8 @@ import JobDetailsPage from './pages/JobDetailsPage'
 import BlogPage from './pages/BlogPage'
 import BlogDetailPage from './pages/BlogDetailPage'
 import AboutPage from './pages/AboutPage'
+import TermsPage from './pages/TermsPage'
+import PrivacyPage from './pages/PrivacyPage'
 import LoginPage from './pages/LoginPage'
 import AdminPage from './pages/AdminPage'
 
@@ -21,6 +23,8 @@ function App() {
                         <Route path="/blog" element={<BlogPage />} />
                         <Route path="/blog/:slug" element={<BlogDetailPage />} />
                         <Route path="/about" element={<AboutPage />} />
+                        <Route path="/terms" element={<TermsPage />} />
+                        <Route path="/privacy" element={<PrivacyPage />} />
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/admin" element={<AdminPage />} />
                     </Routes>

@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 function AboutPage() {
     return (
         <div className="about-page">
@@ -14,16 +16,17 @@ function AboutPage() {
                         <h2 style={{ marginBottom: '1rem' }}>Our Mission</h2>
                         <p style={{ lineHeight: '1.8', color: 'var(--text-secondary)', marginBottom: '2rem' }}>
                             JobFresh is dedicated to making job searching easier, faster, and more transparent for tech professionals in India.
-                            We connect talented individuals with opportunities at top companies.
+                            We connect talented individuals with opportunities at top companies, helping them find their dream careers.
                         </p>
 
                         <h2 style={{ marginBottom: '1rem' }}>What We Offer</h2>
-                        <ul style={{ lineHeight: '1.8', color: 'var(--text-secondary)', marginBottom: '2rem' }}>
+                        <ul style={{ lineHeight: '1.8', color: 'var(--text-secondary)', marginBottom: '2rem', paddingLeft: '1.5rem' }}>
                             <li>Curated job listings from verified companies</li>
                             <li>Detailed company profiles and insights</li>
                             <li>Career guidance and interview tips</li>
                             <li>Transparent salary information</li>
                             <li>Easy application process</li>
+                            <li>Regular updates on new opportunities</li>
                         </ul>
 
                         <h2 style={{ marginBottom: '1rem' }}>Why Choose JobFresh?</h2>
@@ -40,10 +43,15 @@ function AboutPage() {
                         <div style={{ marginTop: '2rem', padding: '1.5rem', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
                             <h3 style={{ marginBottom: '0.5rem' }}>Contact Us</h3>
                             <p style={{ color: 'var(--text-secondary)' }}>
-                                Email: info@jobfresh.com<br />
-                                Phone: +91-80-1234-5678<br />
-                                Location: Bangalore, India
+                                Email: <a href="mailto:jobfresh@jobfresh.in" style={{ color: 'var(--primary)' }}>jobfresh@jobfresh.in</a><br />
+                                Location: India
                             </p>
+                        </div>
+
+                        <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                            <Link to="/terms" style={{ color: 'var(--primary)', textDecoration: 'none' }}>Terms of Service</Link>
+                            <span style={{ color: 'var(--text-secondary)' }}>|</span>
+                            <Link to="/privacy" style={{ color: 'var(--primary)', textDecoration: 'none' }}>Privacy Policy</Link>
                         </div>
                     </div>
                 </div>
