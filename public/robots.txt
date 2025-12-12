@@ -5,11 +5,17 @@ User-agent: *
 Allow: /
 Allow: /blog
 Allow: /blog/*
+Allow: /jobs/*
 Allow: /about
+Allow: /terms
+Allow: /privacy
 
 # Disallow admin and login pages
 Disallow: /admin
 Disallow: /login
+
+# Crawl-delay
+Crawl-delay: 1
 
 # Sitemap
 Sitemap: https://www.jobfresh.in/sitemap.xml
