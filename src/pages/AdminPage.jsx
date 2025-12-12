@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import JobManagement from '../components/admin/JobManagement'
 import CompanyManagement from '../components/admin/CompanyManagement'
 import CategoryManagement from '../components/admin/CategoryManagement'
@@ -8,9 +9,24 @@ import UserManagement from '../components/admin/UserManagement'
 import './AdminPage.css'
 
 function AdminPage() {
-    // Get user role from localStorage
+    const navigate = useNavigate()
+
+    // Get user and token from localStorage
+    const token = localStorage.getItem('token')
     const user = JSON.parse(localStorage.getItem('user') || '{}')
     const userRole = user.role || ''
+
+    // Redirect to login if not authenticated
+    useEffect(() => {
+        if (!token || !userRole) {
+            navigate('/login')
+        }
+    }, [token, userRole, navigate])
+
+    // If not authenticated, don't render anything
+    if (!token || !userRole) {
+        return null
+    }
 
     // Define permissions for each role
     const canManageJobs = ['SUPER_ADMIN', 'ADMIN', 'JOB_MANAGER'].includes(userRole)
