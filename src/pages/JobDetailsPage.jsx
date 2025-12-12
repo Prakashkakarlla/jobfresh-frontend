@@ -441,19 +441,19 @@ function JobDetailsPage() {
                                 gap: '0.5rem',
                                 justifyContent: 'center'
                             }}>
-                                <button onClick={() => navigate('/')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                                <button onClick={() => navigate('/?category=software-development')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
                                     💼 Software Development
                                 </button>
-                                <button onClick={() => navigate('/')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                                <button onClick={() => navigate('/?category=data-science')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
                                     📊 Data Science
                                 </button>
-                                <button onClick={() => navigate('/')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                                <button onClick={() => navigate('/?category=design')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
                                     🎨 Design
                                 </button>
-                                <button onClick={() => navigate('/')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                                <button onClick={() => navigate('/?category=product-management')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
                                     📈 Product Management
                                 </button>
-                                <button onClick={() => navigate('/')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                                <button onClick={() => navigate('/?category=devops')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
                                     🔧 DevOps
                                 </button>
                             </div>

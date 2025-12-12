@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
 
 function HomePage() {
@@ -11,6 +11,16 @@ function HomePage() {
     const [currentPage, setCurrentPage] = useState(0)
     const pageSize = 12 // Jobs per page
     const navigate = useNavigate()
+    const location = useLocation()
+
+    // Read category from URL query params on load
+    useEffect(() => {
+        const params = new URLSearchParams(location.search)
+        const categoryFromUrl = params.get('category')
+        if (categoryFromUrl) {
+            setSelectedCategory(categoryFromUrl)
+        }
+    }, [location.search])
 
     useEffect(() => {
         fetchJobs()
