@@ -1,0 +1,15 @@
+# JobFresh - Job Board
+# https://jobfresh-frontend.vercel.app
+
+User-agent: *
+Allow: /
+Allow: /blog
+Allow: /blog/*
+Allow: /about
+
+# Disallow admin and login pages
+Disallow: /admin
+Disallow: /login
+
+# Sitemap
+Sitemap: https://jobfresh-frontend.vercel.app/sitemap.xml
