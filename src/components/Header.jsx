@@ -26,13 +26,6 @@ function Header() {
                     >
                         About
                     </Link>
-                    <Link
-                        to="/admin"
-                        className={`nav-link ${location.pathname === '/admin' ? 'active' : ''}`}
-                        style={{ color: '#ef4444', fontWeight: '600' }}
-                    >
-                        Admin
-                    </Link>
                 </nav>
             </div>
         </header>
