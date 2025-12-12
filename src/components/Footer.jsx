@@ -20,14 +20,13 @@ function Footer() {
                     <div className="footer-section">
                         <h3>Resources</h3>
                         <Link to="/blog">Blog</Link>
-                        <a href="#privacy">Privacy Policy</a>
-                        <a href="#terms">Terms of Service</a>
+                        <Link to="/privacy">Privacy Policy</Link>
+                        <Link to="/terms">Terms of Service</Link>
                     </div>
                     <div className="footer-section">
                         <h3>Contact</h3>
                         <p style={{ color: 'rgba(255,255,255,0.7)' }}>
-                            Email: info@jobfresh.com<br />
-                            Phone: +91-80-1234-5678
+                            Email: <a href="mailto:jobfresh@jobfresh.in" style={{ color: 'rgba(255,255,255,0.9)' }}>jobfresh@jobfresh.in</a>
                         </p>
                     </div>
                 </div>
