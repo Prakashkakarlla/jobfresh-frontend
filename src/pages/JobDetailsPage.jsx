@@ -9,11 +9,22 @@ function JobDetailsPage() {
     const [company, setCompany] = useState(null)
     const [category, setCategory] = useState(null)
     const [relatedJobs, setRelatedJobs] = useState([])
+    const [allCategories, setAllCategories] = useState([])
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         fetchJobDetails()
+        fetchAllCategories()
     }, [slug])
+
+    const fetchAllCategories = async () => {
+        try {
+            const response = await axios.get('https://api.jobfresh.in/api/categories/all')
+            setAllCategories(response.data)
+        } catch (error) {
+            console.error('Error fetching categories:', error)
+        }
+    }
 
     const fetchJobDetails = async () => {
         try {
@@ -441,21 +452,22 @@ function JobDetailsPage() {
                                 gap: '0.5rem',
                                 justifyContent: 'center'
                             }}>
-                                <button onClick={() => navigate('/?category=software-development')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
-                                    💼 Software Development
-                                </button>
-                                <button onClick={() => navigate('/?category=data-science')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
-                                    📊 Data Science
-                                </button>
-                                <button onClick={() => navigate('/?category=design')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
-                                    🎨 Design
-                                </button>
-                                <button onClick={() => navigate('/?category=product-management')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
-                                    📈 Product Management
-                                </button>
-                                <button onClick={() => navigate('/?category=devops')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
-                                    🔧 DevOps
-                                </button>
+                                {allCategories.map(cat => (
+                                    <button
+                                        key={cat.id}
+                                        onClick={() => navigate(`/?category=${cat.slug}`)}
+                                        style={{
+                                            padding: '0.5rem 1rem',
+                                            background: 'white',
+                                            border: '1px solid var(--border-color)',
+                                            borderRadius: '20px',
+                                            cursor: 'pointer',
+                                            fontSize: '0.85rem'
+                                        }}
+                                    >
+                                        {cat.name}
+                                    </button>
+                                ))}
                             </div>
                         </div>
 
