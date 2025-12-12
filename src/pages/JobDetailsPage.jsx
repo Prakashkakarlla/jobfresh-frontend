@@ -424,10 +424,71 @@ function JobDetailsPage() {
                     )}
                 </div>
                 {/* End grid container */}
+
+                {/* Explore More Section */}
+                <section style={{ padding: '3rem 0', marginTop: '2rem', background: 'var(--bg-secondary)', borderRadius: '12px' }}>
+                    <div className="container">
+                        <h2 style={{ marginBottom: '1.5rem', textAlign: 'center' }}>Explore More Opportunities</h2>
+
+                        {/* Job Categories */}
+                        <div style={{ marginBottom: '2rem' }}>
+                            <h3 style={{ marginBottom: '1rem', textAlign: 'center', fontSize: '1.1rem', color: 'var(--text-secondary)' }}>
+                                Browse by Category
+                            </h3>
+                            <div style={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                gap: '0.5rem',
+                                justifyContent: 'center'
+                            }}>
+                                <button onClick={() => navigate('/')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                                    💼 Software Development
+                                </button>
+                                <button onClick={() => navigate('/')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                                    📊 Data Science
+                                </button>
+                                <button onClick={() => navigate('/')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                                    🎨 Design
+                                </button>
+                                <button onClick={() => navigate('/')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                                    📈 Product Management
+                                </button>
+                                <button onClick={() => navigate('/')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                                    🔧 DevOps
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Blog Resources */}
+                        <div>
+                            <h3 style={{ marginBottom: '1rem', textAlign: 'center', fontSize: '1.1rem', color: 'var(--text-secondary)' }}>
+                                Career Resources
+                            </h3>
+                            <div style={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                gap: '0.5rem',
+                                justifyContent: 'center'
+                            }}>
+                                <button onClick={() => navigate('/blog')} style={{ padding: '0.5rem 1rem', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', border: 'none', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                                    📚 All Articles
+                                </button>
+                                <button onClick={() => navigate('/blog')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                                    💡 Career Tips
+                                </button>
+                                <button onClick={() => navigate('/blog')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                                    🎯 Interview Prep
+                                </button>
+                                <button onClick={() => navigate('/blog')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                                    📝 Resume Tips
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     )
 }
 
 export default JobDetailsPage
-

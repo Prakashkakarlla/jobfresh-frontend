@@ -275,6 +275,119 @@ function HomePage() {
                     )}
                 </div>
             </section>
+
+            {/* Job Categories Section */}
+            <section style={{ padding: '3rem 0', background: 'var(--bg-secondary)' }}>
+                <div className="container">
+                    <h2 style={{ marginBottom: '1.5rem', textAlign: 'center' }}>Browse Jobs by Category</h2>
+                    <div style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: '0.75rem',
+                        justifyContent: 'center'
+                    }}>
+                        {categories.map(cat => (
+                            <button
+                                key={cat.id}
+                                onClick={() => {
+                                    setSelectedCategory(cat.slug)
+                                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                                }}
+                                style={{
+                                    padding: '0.75rem 1.5rem',
+                                    background: selectedCategory === cat.slug ? 'var(--primary)' : 'white',
+                                    color: selectedCategory === cat.slug ? 'white' : 'var(--text)',
+                                    border: '1px solid var(--border-color)',
+                                    borderRadius: '25px',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.3s ease',
+                                    fontWeight: '500',
+                                    fontSize: '0.9rem'
+                                }}
+                            >
+                                {cat.name}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Blog Categories Section */}
+            <section style={{ padding: '3rem 0' }}>
+                <div className="container">
+                    <h2 style={{ marginBottom: '1.5rem', textAlign: 'center' }}>Career Resources</h2>
+                    <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
+                        Explore our blog for career tips, interview guides, and industry insights
+                    </p>
+                    <div style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: '0.75rem',
+                        justifyContent: 'center'
+                    }}>
+                        <button
+                            onClick={() => navigate('/blog')}
+                            style={{
+                                padding: '0.75rem 1.5rem',
+                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '25px',
+                                cursor: 'pointer',
+                                fontWeight: '500',
+                                fontSize: '0.9rem'
+                            }}
+                        >
+                            📚 All Articles
+                        </button>
+                        <button
+                            onClick={() => navigate('/blog')}
+                            style={{
+                                padding: '0.75rem 1.5rem',
+                                background: 'white',
+                                color: 'var(--text)',
+                                border: '1px solid var(--border-color)',
+                                borderRadius: '25px',
+                                cursor: 'pointer',
+                                fontWeight: '500',
+                                fontSize: '0.9rem'
+                            }}
+                        >
+                            💼 Career Tips
+                        </button>
+                        <button
+                            onClick={() => navigate('/blog')}
+                            style={{
+                                padding: '0.75rem 1.5rem',
+                                background: 'white',
+                                color: 'var(--text)',
+                                border: '1px solid var(--border-color)',
+                                borderRadius: '25px',
+                                cursor: 'pointer',
+                                fontWeight: '500',
+                                fontSize: '0.9rem'
+                            }}
+                        >
+                            🎯 Interview Guides
+                        </button>
+                        <button
+                            onClick={() => navigate('/blog')}
+                            style={{
+                                padding: '0.75rem 1.5rem',
+                                background: 'white',
+                                color: 'var(--text)',
+                                border: '1px solid var(--border-color)',
+                                borderRadius: '25px',
+                                cursor: 'pointer',
+                                fontWeight: '500',
+                                fontSize: '0.9rem'
+                            }}
+                        >
+                            📈 Industry Insights
+                        </button>
+                    </div>
+                </div>
+            </section>
         </div>
     )
 }
