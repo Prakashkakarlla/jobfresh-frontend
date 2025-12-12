@@ -1,0 +1,34 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import HomePage from './pages/HomePage'
+import JobDetailsPage from './pages/JobDetailsPage'
+import BlogPage from './pages/BlogPage'
+import BlogDetailPage from './pages/BlogDetailPage'
+import AboutPage from './pages/AboutPage'
+import LoginPage from './pages/LoginPage'
+import AdminPage from './pages/AdminPage'
+
+function App() {
+    return (
+        <Router>
+            <div className="app">
+                <Header />
+                <main>
+                    <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/jobs/:slug" element={<JobDetailsPage />} />
+                        <Route path="/blog" element={<BlogPage />} />
+                        <Route path="/blog/:slug" element={<BlogDetailPage />} />
+                        <Route path="/about" element={<AboutPage />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/admin" element={<AdminPage />} />
+                    </Routes>
+                </main>
+                <Footer />
+            </div>
+        </Router>
+    )
+}
+
+export default App

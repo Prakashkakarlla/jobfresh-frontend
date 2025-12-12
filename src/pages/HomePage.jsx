@@ -1,0 +1,282 @@
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+
+function HomePage() {
+    const [jobs, setJobs] = useState([])
+    const [categories, setCategories] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [searchTerm, setSearchTerm] = useState('')
+    const [selectedCategory, setSelectedCategory] = useState('')
+    const [currentPage, setCurrentPage] = useState(0)
+    const pageSize = 12 // Jobs per page
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        fetchJobs()
+        fetchCategories()
+    }, [])
+
+    const fetchJobs = async () => {
+        try {
+            setLoading(true)
+            const timestamp = new Date().getTime()
+            // Fetch all jobs - no backend pagination
+            const response = await axios.get(`/api/jobs?size=1000&_t=${timestamp}`)
+            setJobs(response.data.content)
+            setLoading(false)
+        } catch (error) {
+            console.error('Error fetching jobs:', error)
+            setLoading(false)
+        }
+    }
+
+    const fetchCategories = async () => {
+        try {
+            const timestamp = new Date().getTime()
+            const response = await axios.get(`/api/categories/all?_t=${timestamp}`)
+            setCategories(response.data)
+        } catch (error) {
+            console.error('Error fetching categories:', error)
+        }
+    }
+
+    const filteredJobs = jobs.filter(job => {
+        const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            job.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            job.location.toLowerCase().includes(searchTerm.toLowerCase())
+        const matchesCategory = !selectedCategory || job.categorySlug === selectedCategory
+        return matchesSearch && matchesCategory
+    })
+
+    // Client-side pagination
+    const totalFilteredJobs = filteredJobs.length
+    const totalPages = Math.ceil(totalFilteredJobs / pageSize)
+    const startIndex = currentPage * pageSize
+    const endIndex = startIndex + pageSize
+    const paginatedJobs = filteredJobs.slice(startIndex, endIndex)
+
+    // Reset to page 0 when filters change
+    useEffect(() => {
+        setCurrentPage(0)
+    }, [searchTerm, selectedCategory])
+
+    const formatSalary = (min, max) => {
+        const formatLPA = (amount) => {
+            return `₹${(amount / 100000).toFixed(0)} LPA`
+        }
+        return `${formatLPA(min)} - ${formatLPA(max)}`
+    }
+
+    return (
+        <div className="home">
+            <section className="hero">
+                <div className="container">
+                    <h1 className="fade-in">Find Your Dream Job</h1>
+                    <p className="fade-in" style={{ animationDelay: '0.1s' }}>
+                        Discover opportunities from top companies
+                    </p>
+
+                    <div className="search-container fade-in" style={{ animationDelay: '0.2s' }}>
+                        <input
+                            type="text"
+                            placeholder="Search by job title, company, or location..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="search-input"
+                        />
+
+                        <select
+                            value={selectedCategory}
+                            onChange={(e) => setSelectedCategory(e.target.value)}
+                            className="category-select"
+                        >
+                            <option value="">All Categories</option>
+                            {categories.map((cat) => (
+                                <option key={cat.id} value={cat.slug}>
+                                    {cat.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <section className="jobs-section">
+                <div className="container">
+                    {loading ? (
+                        <div className="loading">Loading jobs...</div>
+                    ) : paginatedJobs.length === 0 ? (
+                        <div className="empty-state">
+                            <h2>No jobs found</h2>
+                            <p>Try adjusting your search criteria</p>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="job-grid fade-in">
+                                {paginatedJobs.map(job => (
+                                    <div
+                                        key={job.id}
+                                        className="job-card"
+                                        onClick={() => navigate(`/jobs/${job.slug}`)}
+                                    >
+                                        <div className="job-header">
+                                            <div>
+                                                <h3 className="job-title">{job.title}</h3>
+                                                <p className="company-name">{job.companyName}</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="job-meta">
+                                            <span className="meta-item">📍 {job.location}</span>
+                                            <span className="meta-item">💼 {job.jobType}</span>
+                                            <span className="meta-item">🏢 {job.workMode}</span>
+                                        </div>
+
+                                        <div style={{ marginTop: '1rem' }}>
+                                            <span className="badge badge-primary">{job.categoryName}</span>
+                                            {job.remote && <span className="badge badge-success" style={{ marginLeft: '0.5rem' }}>Remote</span>}
+                                        </div>
+
+                                        {job.salaryMin && (
+                                            <div className="salary">
+                                                {formatSalary(job.salaryMin, job.salaryMax)}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Pagination */}
+                            {totalPages > 1 && (
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    gap: '0.5rem',
+                                    marginTop: '3rem',
+                                    flexWrap: 'wrap'
+                                }}>
+                                    <button
+                                        onClick={() => setCurrentPage(0)}
+                                        disabled={currentPage === 0}
+                                        className="btn"
+                                        style={{
+                                            padding: '0.5rem 1rem',
+                                            opacity: currentPage === 0 ? 0.5 : 1,
+                                            cursor: currentPage === 0 ? 'not-allowed' : 'pointer'
+                                        }}
+                                    >
+                                        « First
+                                    </button>
+
+                                    <button
+                                        onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
+                                        disabled={currentPage === 0}
+                                        className="btn"
+                                        style={{
+                                            padding: '0.5rem 1rem',
+                                            opacity: currentPage === 0 ? 0.5 : 1,
+                                            cursor: currentPage === 0 ? 'not-allowed' : 'pointer'
+                                        }}
+                                    >
+                                        ‹ Prev
+                                    </button>
+
+                                    {/* Page numbers */}
+                                    <div style={{ display: 'flex', gap: '0.25rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                                        {[...Array(totalPages)].map((_, index) => {
+                                            // Show only relevant pages on mobile
+                                            if (totalPages > 7) {
+                                                if (
+                                                    index === 0 ||
+                                                    index === totalPages - 1 ||
+                                                    (index >= currentPage - 1 && index <= currentPage + 1)
+                                                ) {
+                                                    return (
+                                                        <button
+                                                            key={index}
+                                                            onClick={() => setCurrentPage(index)}
+                                                            className="btn"
+                                                            style={{
+                                                                padding: '0.5rem 0.75rem',
+                                                                minWidth: '40px',
+                                                                background: currentPage === index ? 'var(--primary)' : 'white',
+                                                                color: currentPage === index ? 'white' : 'var(--text)',
+                                                                fontWeight: currentPage === index ? 'bold' : 'normal'
+                                                            }}
+                                                        >
+                                                            {index + 1}
+                                                        </button>
+                                                    )
+                                                } else if (index === currentPage - 2 || index === currentPage + 2) {
+                                                    return <span key={index} style={{ padding: '0.5rem' }}>...</span>
+                                                }
+                                                return null
+                                            }
+                                            // Show all pages if 7 or fewer
+                                            return (
+                                                <button
+                                                    key={index}
+                                                    onClick={() => setCurrentPage(index)}
+                                                    className="btn"
+                                                    style={{
+                                                        padding: '0.5rem 0.75rem',
+                                                        minWidth: '40px',
+                                                        background: currentPage === index ? 'var(--primary)' : 'white',
+                                                        color: currentPage === index ? 'white' : 'var(--text)',
+                                                        fontWeight: currentPage === index ? 'bold' : 'normal'
+                                                    }}
+                                                >
+                                                    {index + 1}
+                                                </button>
+                                            )
+                                        })}
+                                    </div>
+
+                                    <button
+                                        onClick={() => setCurrentPage(prev => Math.min(totalPages - 1, prev + 1))}
+                                        disabled={currentPage === totalPages - 1}
+                                        className="btn"
+                                        style={{
+                                            padding: '0.5rem 1rem',
+                                            opacity: currentPage === totalPages - 1 ? 0.5 : 1,
+                                            cursor: currentPage === totalPages - 1 ? 'not-allowed' : 'pointer'
+                                        }}
+                                    >
+                                        Next ›
+                                    </button>
+
+                                    <button
+                                        onClick={() => setCurrentPage(totalPages - 1)}
+                                        disabled={currentPage === totalPages - 1}
+                                        className="btn"
+                                        style={{
+                                            padding: '0.5rem 1rem',
+                                            opacity: currentPage === totalPages - 1 ? 0.5 : 1,
+                                            cursor: currentPage === totalPages - 1 ? 'not-allowed' : 'pointer'
+                                        }}
+                                    >
+                                        Last »
+                                    </button>
+
+                                    <div style={{
+                                        width: '100%',
+                                        textAlign: 'center',
+                                        marginTop: '1rem',
+                                        color: 'var(--text-secondary)',
+                                        fontSize: '0.9rem'
+                                    }}>
+                                        Showing {startIndex + 1} - {Math.min(endIndex, totalFilteredJobs)} of {totalFilteredJobs} jobs
+                                    </div>
+                                </div>
+                            )}
+                        </>
+                    )}
+                </div>
+            </section>
+        </div>
+    )
+}
+
+export default HomePage
