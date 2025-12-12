@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { SkeletonJobDetails } from '../components/Skeleton'
+import { cache, CACHE_KEYS } from '../utils/cache'
 
 function JobDetailsPage() {
     const { slug } = useParams()
@@ -122,7 +124,13 @@ function JobDetailsPage() {
     }
 
     if (loading) {
-        return <div className="loading">Loading job details...</div>
+        return (
+            <div className="job-details">
+                <div className="container">
+                    <SkeletonJobDetails />
+                </div>
+            </div>
+        )
     }
 
     if (!job) {
