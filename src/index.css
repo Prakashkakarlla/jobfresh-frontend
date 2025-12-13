@@ -664,8 +664,24 @@ body {
 @media (max-width: 768px) {
   .blog-detail-container {
     max-width: 100%;
-    padding: 1rem 0;
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
+    padding: 1rem 0.5rem;
+    width: 100%;
+  }
+
+  .blog-detail-container .job-details-card {
+    padding: 0.5rem;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  .blog-detail-container .blog-content {
+    padding: 0;
+  }
+
+  .blog-detail-container .blog-content img {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+    border-radius: 4px;
   }
 }
