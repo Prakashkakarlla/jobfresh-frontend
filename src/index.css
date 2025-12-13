@@ -43,6 +43,13 @@ body {
   padding: 0 1.5rem;
 }
 
+/* Mobile: reduce padding for more content visibility */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 0.75rem;
+  }
+}
+
 /* Header */
 .header {
   background: var(--bg-primary);
