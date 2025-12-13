@@ -93,13 +93,14 @@ function BlogDetailPage() {
                         By {blog.authorName || 'Anonymous'} • {blog.createdAt || 'Unknown date'}
                         {blog.readingTimeMinutes && ` • ${blog.readingTimeMinutes} min read`}
                     </p>
-                    <div style={{
-                        lineHeight: '1.8',
-                        color: 'var(--text-secondary)',
-                        whiteSpace: 'pre-line'
-                    }}>
-                        {blog.content}
-                    </div>
+                    <div
+                        className="blog-content"
+                        style={{
+                            lineHeight: '1.8',
+                            color: 'var(--text-primary)'
+                        }}
+                        dangerouslySetInnerHTML={{ __html: blog.content }}
+                    />
                 </article>
             </div>
         </div>
