@@ -4,6 +4,12 @@ import axios from 'axios'
 import { SkeletonBlogGrid } from '../components/Skeleton'
 import { cache, CACHE_KEYS } from '../utils/cache'
 
+// Helper function to strip HTML tags from content
+const stripHtml = (html) => {
+    if (!html) return ''
+    return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ')
+}
+
 function BlogPage() {
     const [blogs, setBlogs] = useState([])
     const [loading, setLoading] = useState(true)
@@ -66,7 +72,7 @@ function BlogPage() {
                                     }}></div>
                                     <div className="blog-content">
                                         <h3 className="blog-title">{blog.title}</h3>
-                                        <p className="blog-excerpt">{blog.content?.substring(0, 150)}...</p>
+                                        <p className="blog-excerpt">{stripHtml(blog.content)?.substring(0, 150)}...</p>
                                         <p style={{ marginTop: '1rem', fontSize: '0.875rem', color: 'var(--text-secondary)', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                                             <span>By {blog.authorName || 'Anonymous'}</span>
                                             <span>• {blog.category?.name || 'Uncategorized'}</span>
