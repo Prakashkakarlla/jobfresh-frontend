@@ -654,3 +654,16 @@ body {
   border-top: 1px solid var(--border);
   margin: 2rem 0;
 }
+
+/* Blog Detail Page Container */
+.blog-detail-container {
+  max-width: 800px;
+  padding: 2rem 1rem;
+}
+
+@media (max-width: 768px) {
+  .blog-detail-container {
+    max-width: 100%;
+    padding: 1.5rem 0.75rem;
+  }
+}

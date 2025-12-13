@@ -45,7 +45,7 @@ function BlogDetailPage() {
 
     return (
         <div className="blog-detail">
-            <div className="container" style={{ maxWidth: '800px', padding: '3rem 0' }}>
+            <div className="container blog-detail-container">
                 <button
                     onClick={() => navigate('/blog')}
                     style={{
