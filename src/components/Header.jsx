@@ -6,7 +6,13 @@ function Header() {
     return (
         <header className="header">
             <div className="container header-content">
-                <Link to="/" className="logo">JobFresh</Link>
+                <Link to="/" className="logo">
+                    <img
+                        src="/assets/Gemini_Generated_Image_tppa7atppa7atppa.png"
+                        alt="JobFresh"
+                        style={{ height: '40px', width: 'auto' }}
+                    />
+                </Link>
                 <nav className="nav">
                     <Link
                         to="/"
