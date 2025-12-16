@@ -1,5 +1,5 @@
 # JobFresh - Job Board
-# https://www.jobfresh.in
+# https://jobfresh.in
 
 User-agent: *
 Allow: /
@@ -18,4 +18,4 @@ Disallow: /login
 Crawl-delay: 1
 
 # Sitemap
-Sitemap: https://www.jobfresh.in/sitemap.xml
+Sitemap: https://jobfresh.in/sitemap.xml
