@@ -7,8 +7,10 @@ import JobDetailsPage from './pages/JobDetailsPage'
 import BlogPage from './pages/BlogPage'
 import BlogDetailPage from './pages/BlogDetailPage'
 import AboutPage from './pages/AboutPage'
+import ContactPage from './pages/ContactPage'
 import TermsPage from './pages/TermsPage'
 import PrivacyPage from './pages/PrivacyPage'
+import DisclaimerPage from './pages/DisclaimerPage'
 import LoginPage from './pages/LoginPage'
 import AdminPage from './pages/AdminPage'
 
@@ -25,8 +27,10 @@ function App() {
                         <Route path="/blog" element={<BlogPage />} />
                         <Route path="/blog/:slug" element={<BlogDetailPage />} />
                         <Route path="/about" element={<AboutPage />} />
+                        <Route path="/contact" element={<ContactPage />} />
                         <Route path="/terms" element={<TermsPage />} />
                         <Route path="/privacy" element={<PrivacyPage />} />
+                        <Route path="/disclaimer" element={<DisclaimerPage />} />
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/admin" element={<AdminPage />} />
                     </Routes>

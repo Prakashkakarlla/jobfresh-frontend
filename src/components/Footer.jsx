@@ -16,15 +16,16 @@ function Footer() {
                         <Link to="/">Browse Jobs</Link>
                         <Link to="/blog">Career Guide</Link>
                         <Link to="/about">About Us</Link>
+                        <Link to="/contact">Contact</Link>
                     </div>
                     <div className="footer-section">
-                        <h3>Resources</h3>
-                        <Link to="/blog">Blog</Link>
+                        <h3>Legal</h3>
                         <Link to="/privacy">Privacy Policy</Link>
-                        <Link to="/terms">Terms of Service</Link>
+                        <Link to="/terms">Terms & Conditions</Link>
+                        <Link to="/disclaimer">Disclaimer</Link>
                     </div>
                     <div className="footer-section">
-                        <h3>Contact</h3>
+                        <h3>Contact Us</h3>
                         <p style={{ color: 'rgba(255,255,255,0.7)' }}>
                             Email: <a href="mailto:jobfresh@jobfresh.in" style={{ color: 'rgba(255,255,255,0.9)' }}>jobfresh@jobfresh.in</a>
                         </p>
