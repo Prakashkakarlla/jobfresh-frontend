@@ -7,10 +7,7 @@ function Header() {
         <header className="header">
             <div className="container header-content">
                 <Link to="/" className="logo">
-                    <img
-                        src="/assets/Gemini_Generated_Image_tppa7atppa7atppa (1).png"
-                        alt="JobFresh"
-                    />
+                    <span className="logo-text">JobFresh</span>
                 </Link>
                 <nav className="nav">
                     <Link
