@@ -143,16 +143,40 @@ body {
     padding: 0.5rem 0;
   }
 
+  .logo-text {
+    font-size: 1.2rem;
+  }
+
   .logo img {
-    height: 30px;
+    height: 28px;
   }
 
   .nav {
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .nav-link {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
+    padding: 0.25rem;
+  }
+
+  .nav-link::after {
+    display: none;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 400px) {
+  .logo-text {
+    font-size: 1rem;
+  }
+
+  .nav {
+    gap: 0.35rem;
+  }
+
+  .nav-link {
+    font-size: 0.75rem;
   }
 }
 
