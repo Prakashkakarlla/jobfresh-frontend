@@ -103,13 +103,16 @@ body {
 }
 
 .nav {
-  display: flex;
+  display: flex !important;
+  visibility: visible !important;
   gap: 1.5rem;
   align-items: center;
   flex-shrink: 0;
 }
 
 .nav-link {
+  display: inline-block !important;
+  visibility: visible !important;
   text-decoration: none;
   color: var(--text-secondary);
   font-weight: 500;
