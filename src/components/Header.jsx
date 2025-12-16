@@ -8,7 +8,7 @@ function Header() {
             <div className="container header-content">
                 <Link to="/" className="logo">
                     <img
-                        src="/assets/Gemini_Generated_Image_tppa7atppa7atppa.png"
+                        src="/assets/Gemini_Generated_Image_tppa7atppa7atppa (1).png"
                         alt="JobFresh"
                         style={{ height: '40px', width: 'auto' }}
                     />
