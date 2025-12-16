@@ -33,19 +33,22 @@ function HomePage() {
         try {
             // Check cache first
             const cachedJobs = cache.get(CACHE_KEYS.JOBS)
-            if (cachedJobs) {
+            if (cachedJobs && cachedJobs.length > 0) {
                 setJobs(cachedJobs)
                 setLoading(false)
                 return
             }
 
-            setLoading(true)
             const response = await axios.get('https://api.jobfresh.in/api/jobs?size=1000')
-            setJobs(response.data.content)
-            cache.set(CACHE_KEYS.JOBS, response.data.content) // Cache the results
-            setLoading(false)
+            const jobsData = response.data?.content || []
+            setJobs(jobsData)
+            if (jobsData.length > 0) {
+                cache.set(CACHE_KEYS.JOBS, jobsData)
+            }
         } catch (error) {
             console.error('Error fetching jobs:', error)
+            setJobs([]) // Set empty array on error
+        } finally {
             setLoading(false)
         }
     }
