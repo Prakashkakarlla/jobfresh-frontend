@@ -1,21 +1,24 @@
 # JobFresh - Job Board
 # https://jobfresh.in
 
+# Allow all bots full access
 User-agent: *
 Allow: /
-Allow: /blog
-Allow: /blog/*
-Allow: /jobs/*
-Allow: /about
-Allow: /terms
-Allow: /privacy
 
-# Disallow admin and login pages
+# Specific rules for Google AdsBot (required for AdSense)
+User-agent: AdsBot-Google
+Allow: /
+
+User-agent: AdsBot-Google-Mobile
+Allow: /
+
+User-agent: Mediapartners-Google
+Allow: /
+
+# Disallow admin and login pages for all bots
+User-agent: *
 Disallow: /admin
 Disallow: /login
-
-# Crawl-delay
-Crawl-delay: 1
 
 # Sitemap
 Sitemap: https://jobfresh.in/sitemap.xml
