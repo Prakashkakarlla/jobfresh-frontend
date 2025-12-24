@@ -98,7 +98,7 @@ function CategoryManagement() {
         e.preventDefault()
         try {
             if (editingCategory) {
-                await axios.put(`/ api / categories / ${editingCategory.id} `, formData)
+                await axios.put(`https://api.jobfresh.in/api/categories/${editingCategory.id}`, formData)
                 alert('Category updated!')
             } else {
                 await axios.post('https://api.jobfresh.in/api/categories', formData)
@@ -154,7 +154,7 @@ function CategoryManagement() {
 
         console.log('User confirmed - Sending DELETE to /api/categories/' + id)
         try {
-            const response = await axios.delete(`/ api / categories / ${id} `)
+            const response = await axios.delete(`https://api.jobfresh.in/api/categories/${id}`)
             console.log('DELETE SUCCESS:', response)
             alert(`${name} deleted successfully!`)
             fetchCategories()
