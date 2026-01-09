@@ -420,6 +420,75 @@ function HomePage() {
                     </div>
                 </div>
             </section>
+
+            {/* About JobFresh Section - For AdSense and User Understanding */}
+            <section style={{ padding: '3rem 0', background: 'var(--bg-secondary)' }}>
+                <div className="container">
+                    <h2 style={{ marginBottom: '1.5rem', textAlign: 'center' }}>About JobFresh</h2>
+                    <div style={{
+                        maxWidth: '900px',
+                        margin: '0 auto',
+                        background: 'white',
+                        borderRadius: '12px',
+                        padding: '2rem',
+                        boxShadow: '0 2px 10px rgba(0,0,0,0.05)'
+                    }}>
+                        <p style={{
+                            fontSize: '1.1rem',
+                            lineHeight: '1.8',
+                            color: 'var(--text-secondary)',
+                            marginBottom: '1.5rem'
+                        }}>
+                            <strong>JobFresh</strong> is India's premier job portal designed specifically for
+                            tech professionals and freshers looking to start or advance their careers in the
+                            IT industry. We connect talented individuals with top companies like Google,
+                            Microsoft, Amazon, TCS, Infosys, and many more.
+                        </p>
+
+                        <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: 'var(--text)' }}>
+                            What We Offer
+                        </h3>
+                        <ul style={{
+                            lineHeight: '1.8',
+                            color: 'var(--text-secondary)',
+                            paddingLeft: '1.5rem',
+                            marginBottom: '1.5rem'
+                        }}>
+                            <li><strong>Curated Job Listings:</strong> Hand-picked tech job opportunities from verified companies</li>
+                            <li><strong>Multiple Categories:</strong> Software Development, Frontend, Backend, DevOps, Cloud, Data Science, and more</li>
+                            <li><strong>Career Resources:</strong> Interview tips, career guides, and industry insights through our blog</li>
+                            <li><strong>Easy Application:</strong> Direct links to apply for jobs at company career pages</li>
+                            <li><strong>Free Access:</strong> Browse and apply to all jobs completely free of charge</li>
+                        </ul>
+
+                        <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: 'var(--text)' }}>
+                            Who Is JobFresh For?
+                        </h3>
+                        <p style={{
+                            lineHeight: '1.8',
+                            color: 'var(--text-secondary)',
+                            marginBottom: '1rem'
+                        }}>
+                            JobFresh is perfect for <strong>freshers</strong> looking for their first job,
+                            <strong> experienced professionals</strong> seeking new opportunities, and
+                            <strong> students</strong> exploring career options in the tech industry.
+                            Whether you're looking for roles in Bangalore, Hyderabad, Mumbai, Pune,
+                            Chennai, or remote positions, we've got you covered.
+                        </p>
+
+                        <div style={{
+                            textAlign: 'center',
+                            marginTop: '1.5rem',
+                            paddingTop: '1.5rem',
+                            borderTop: '1px solid var(--border-color)'
+                        }}>
+                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                                Start your job search today — it's completely free!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     )
 }
