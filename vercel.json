@@ -13,7 +13,7 @@
                 }
             ],
             "destination": "https://jobfresh.in/:path*",
-            "permanent": true
+            "statusCode": 301
         }
     ],
     "rewrites": [
