@@ -3,19 +3,6 @@
     "buildCommand": "npm run build",
     "outputDirectory": "dist",
     "framework": "vite",
-    "redirects": [
-        {
-            "source": "/:path*",
-            "has": [
-                {
-                    "type": "host",
-                    "value": "www.jobfresh.in"
-                }
-            ],
-            "destination": "https://jobfresh.in/:path*",
-            "statusCode": 301
-        }
-    ],
     "rewrites": [
         {
             "source": "/((?!api/).*)",
