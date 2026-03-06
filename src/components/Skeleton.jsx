@@ -1,16 +1,22 @@
 import './Skeleton.css'
 
-// Skeleton Job Card Component
+// Skeleton Job Card Component — with logo placeholder
 export function SkeletonJobCard() {
     return (
         <div className="skeleton-job-card">
-            <div className="skeleton skeleton-badge"></div>
-            <div className="skeleton skeleton-title"></div>
-            <div className="skeleton skeleton-company"></div>
+            <div className="skeleton-card-top">
+                <div className="skeleton skeleton-logo"></div>
+                <div className="skeleton-card-info">
+                    <div className="skeleton skeleton-title"></div>
+                    <div className="skeleton skeleton-company"></div>
+                </div>
+            </div>
             <div className="skeleton-meta">
                 <div className="skeleton skeleton-meta-item"></div>
                 <div className="skeleton skeleton-meta-item"></div>
+                <div className="skeleton skeleton-meta-item"></div>
             </div>
+            <div className="skeleton skeleton-badge"></div>
             <div className="skeleton skeleton-salary"></div>
         </div>
     )

@@ -196,7 +196,7 @@ function JobDetailsPage() {
 
                             {/* Salary from compensation object or direct fields */}
                             {(job.compensation?.salaryMin || job.salaryMin) && (
-                                <div className="salary" style={{ fontSize: '1.5rem', marginBottom: '1.5rem', fontWeight: '600', color: 'var(--primary)' }}>
+                                <div className="salary" style={{ fontSize: '1.5rem', marginBottom: '1.5rem', fontWeight: '700', color: 'var(--primary)' }}>
                                     💰 {formatSalary(
                                         job.compensation?.salaryMin || job.salaryMin,
                                         job.compensation?.salaryMax || job.salaryMax
@@ -215,7 +215,7 @@ function JobDetailsPage() {
 
                         {/* Company Information Section */}
                         {company && company.about && (
-                            <div className="job-section" style={{ background: '#f8fafc', padding: '1.5rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                            <div className="job-section" style={{ background: 'var(--bg-elevated)', padding: '1.5rem', borderRadius: '12px', border: '1px solid var(--border)' }}>
                                 <h2>About {company.name}</h2>
                                 <p>{company.about}</p>
                                 {company.website && (
@@ -367,10 +367,10 @@ function JobDetailsPage() {
                     {relatedJobs.length > 0 && (
                         <div className="related-jobs-sidebar">
                             <div style={{
-                                background: 'white',
+                                background: 'var(--bg-card)',
                                 padding: '1.5rem',
-                                borderRadius: '12px',
-                                border: '1px solid #e5e7eb'
+                                borderRadius: '16px',
+                                border: '1px solid var(--border)'
                             }}>
                                 <h3 style={{
                                     marginBottom: '1.5rem',
@@ -393,21 +393,21 @@ function JobDetailsPage() {
                                             }}
                                             style={{
                                                 padding: '1rem',
-                                                border: '1px solid #e5e7eb',
-                                                borderRadius: '8px',
+                                                border: '1px solid var(--border)',
+                                                borderRadius: '12px',
                                                 cursor: 'pointer',
-                                                transition: 'all 0.2s',
-                                                background: '#f9fafb'
+                                                transition: 'all 0.3s',
+                                                background: 'var(--bg-elevated)'
                                             }}
                                             onMouseEnter={(e) => {
-                                                e.currentTarget.style.background = 'white'
-                                                e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)'
+                                                e.currentTarget.style.background = 'var(--bg-card-hover)'
+                                                e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 212, 170, 0.1)'
                                                 e.currentTarget.style.borderColor = 'var(--primary)'
                                             }}
                                             onMouseLeave={(e) => {
-                                                e.currentTarget.style.background = '#f9fafb'
+                                                e.currentTarget.style.background = 'var(--bg-elevated)'
                                                 e.currentTarget.style.boxShadow = 'none'
-                                                e.currentTarget.style.borderColor = '#e5e7eb'
+                                                e.currentTarget.style.borderColor = 'var(--border)'
                                             }}
                                         >
                                             <h4 style={{
@@ -445,7 +445,7 @@ function JobDetailsPage() {
                 {/* End grid container */}
 
                 {/* Explore More Section */}
-                <section style={{ padding: '3rem 0', marginTop: '2rem', background: 'var(--bg-secondary)', borderRadius: '12px' }}>
+                <section style={{ padding: '3rem 0', marginTop: '2rem', background: 'var(--bg-card)', borderRadius: '16px', border: '1px solid var(--border)' }}>
                     <div className="container">
                         <h2 style={{ marginBottom: '1.5rem', textAlign: 'center' }}>Explore More Opportunities</h2>
 
@@ -464,10 +464,9 @@ function JobDetailsPage() {
                                     <button
                                         key={cat.id}
                                         onClick={() => navigate(`/?category=${cat.slug}`)}
+                                        className="category-pill"
                                         style={{
                                             padding: '0.5rem 1rem',
-                                            background: 'white',
-                                            border: '1px solid var(--border-color)',
                                             borderRadius: '20px',
                                             cursor: 'pointer',
                                             fontSize: '0.85rem'
@@ -490,16 +489,16 @@ function JobDetailsPage() {
                                 gap: '0.5rem',
                                 justifyContent: 'center'
                             }}>
-                                <button onClick={() => navigate('/blog')} style={{ padding: '0.5rem 1rem', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', border: 'none', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                                <button onClick={() => navigate('/blog')} className="category-pill active" style={{ padding: '0.5rem 1rem' }}>
                                     📚 All Articles
                                 </button>
-                                <button onClick={() => navigate('/blog')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                                <button onClick={() => navigate('/blog')} className="category-pill" style={{ padding: '0.5rem 1rem' }}>
                                     💡 Career Tips
                                 </button>
-                                <button onClick={() => navigate('/blog')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                                <button onClick={() => navigate('/blog')} className="category-pill" style={{ padding: '0.5rem 1rem' }}>
                                     🎯 Interview Prep
                                 </button>
-                                <button onClick={() => navigate('/blog')} style={{ padding: '0.5rem 1rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '20px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                                <button onClick={() => navigate('/blog')} className="category-pill" style={{ padding: '0.5rem 1rem' }}>
                                     📝 Resume Tips
                                 </button>
                             </div>

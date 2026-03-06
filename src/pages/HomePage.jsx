@@ -11,11 +11,10 @@ function HomePage() {
     const [searchTerm, setSearchTerm] = useState('')
     const [selectedCategory, setSelectedCategory] = useState('')
     const [currentPage, setCurrentPage] = useState(0)
-    const pageSize = 12 // Jobs per page
+    const pageSize = 12
     const navigate = useNavigate()
     const location = useLocation()
 
-    // Read category from URL query params on load
     useEffect(() => {
         const params = new URLSearchParams(location.search)
         const categoryFromUrl = params.get('category')
@@ -31,7 +30,6 @@ function HomePage() {
 
     const fetchJobs = async () => {
         try {
-            // Check cache first
             const cachedJobs = cache.get(CACHE_KEYS.JOBS)
             if (cachedJobs && cachedJobs.length > 0) {
                 setJobs(cachedJobs)
@@ -47,7 +45,7 @@ function HomePage() {
             }
         } catch (error) {
             console.error('Error fetching jobs:', error)
-            setJobs([]) // Set empty array on error
+            setJobs([])
         } finally {
             setLoading(false)
         }
@@ -55,7 +53,6 @@ function HomePage() {
 
     const fetchCategories = async () => {
         try {
-            // Check cache first
             const cachedCategories = cache.get(CACHE_KEYS.JOB_CATEGORIES)
             if (cachedCategories) {
                 setCategories(cachedCategories)
@@ -64,7 +61,7 @@ function HomePage() {
 
             const response = await axios.get('https://api.jobfresh.in/api/categories/all')
             setCategories(response.data)
-            cache.set(CACHE_KEYS.JOB_CATEGORIES, response.data) // Cache the results
+            cache.set(CACHE_KEYS.JOB_CATEGORIES, response.data)
         } catch (error) {
             console.error('Error fetching categories:', error)
         }
@@ -78,14 +75,12 @@ function HomePage() {
         return matchesSearch && matchesCategory
     })
 
-    // Client-side pagination
     const totalFilteredJobs = filteredJobs.length
     const totalPages = Math.ceil(totalFilteredJobs / pageSize)
     const startIndex = currentPage * pageSize
     const endIndex = startIndex + pageSize
     const paginatedJobs = filteredJobs.slice(startIndex, endIndex)
 
-    // Reset to page 0 when filters change
     useEffect(() => {
         setCurrentPage(0)
     }, [searchTerm, selectedCategory])
@@ -97,13 +92,22 @@ function HomePage() {
         return `${formatLPA(min)} - ${formatLPA(max)}`
     }
 
+    const getCompanyLogo = (companyName) => {
+        const encoded = encodeURIComponent(companyName)
+        return `https://ui-avatars.com/api/?name=${encoded}&background=1a1a2e&color=00d4aa&size=80&bold=true&format=svg`
+    }
+
+    const uniqueCompanies = new Set(jobs.map(j => j.companyName)).size
+
     return (
         <div className="home">
             <section className="hero">
                 <div className="container">
-                    <h1 className="fade-in">Find Your Dream Job</h1>
+                    <h1 className="fade-in">
+                        Find Your <span className="highlight">Dream Job</span>
+                    </h1>
                     <p className="fade-in" style={{ animationDelay: '0.1s' }}>
-                        Discover opportunities from top companies
+                        Discover top tech opportunities from leading companies across India
                     </p>
 
                     <div className="search-container fade-in" style={{ animationDelay: '0.2s' }}>
@@ -130,6 +134,24 @@ function HomePage() {
                             ))}
                         </select>
                     </div>
+
+                    {/* Stats */}
+                    {!loading && jobs.length > 0 && (
+                        <div className="stats-row fade-in" style={{ animationDelay: '0.3s' }}>
+                            <div className="stat-item">
+                                <div className="stat-number">{jobs.length}+</div>
+                                <div className="stat-label">Active Jobs</div>
+                            </div>
+                            <div className="stat-item">
+                                <div className="stat-number">{uniqueCompanies}+</div>
+                                <div className="stat-label">Companies</div>
+                            </div>
+                            <div className="stat-item">
+                                <div className="stat-number">{categories.length}</div>
+                                <div className="stat-label">Categories</div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </section>
 
@@ -152,52 +174,48 @@ function HomePage() {
                                         className="job-card"
                                         onClick={() => navigate(`/jobs/${job.slug}`)}
                                     >
-                                        <div className="job-header">
-                                            <div>
-                                                <h3 className="job-title">{job.title}</h3>
-                                                <p className="company-name">{job.companyName}</p>
+                                        <div className="job-card-inner">
+                                            <div className="job-card-top">
+                                                <img
+                                                    src={getCompanyLogo(job.companyName)}
+                                                    alt={job.companyName}
+                                                    className="job-card-logo"
+                                                    loading="lazy"
+                                                />
+                                                <div>
+                                                    <h3 className="job-title">{job.title}</h3>
+                                                    <p className="company-name">{job.companyName}</p>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div className="job-meta">
-                                            <span className="meta-item">📍 {job.location}</span>
-                                            <span className="meta-item">💼 {job.jobType}</span>
-                                            <span className="meta-item">🏢 {job.workMode}</span>
-                                        </div>
-
-                                        <div style={{ marginTop: '1rem' }}>
-                                            <span className="badge badge-primary">{job.categoryName}</span>
-                                            {job.remote && <span className="badge badge-success" style={{ marginLeft: '0.5rem' }}>Remote</span>}
-                                        </div>
-
-                                        {job.salaryMin && (
-                                            <div className="salary">
-                                                {formatSalary(job.salaryMin, job.salaryMax)}
+                                            <div className="job-meta">
+                                                <span className="meta-item">📍 {job.location}</span>
+                                                <span className="meta-item">💼 {job.jobType}</span>
+                                                <span className="meta-item">🏢 {job.workMode}</span>
                                             </div>
-                                        )}
+
+                                            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                                <span className="badge badge-primary">{job.categoryName}</span>
+                                                {job.remote && <span className="badge badge-success">Remote</span>}
+                                            </div>
+
+                                            {job.salaryMin && (
+                                                <div className="salary">
+                                                    {formatSalary(job.salaryMin, job.salaryMax)}
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 ))}
                             </div>
 
                             {/* Pagination */}
                             {totalPages > 1 && (
-                                <div style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    gap: '0.5rem',
-                                    marginTop: '3rem',
-                                    flexWrap: 'wrap'
-                                }}>
+                                <div className="pagination-container">
                                     <button
                                         onClick={() => setCurrentPage(0)}
                                         disabled={currentPage === 0}
-                                        className="btn"
-                                        style={{
-                                            padding: '0.5rem 1rem',
-                                            opacity: currentPage === 0 ? 0.5 : 1,
-                                            cursor: currentPage === 0 ? 'not-allowed' : 'pointer'
-                                        }}
+                                        className="pagination-btn"
                                     >
                                         « First
                                     </button>
@@ -205,20 +223,13 @@ function HomePage() {
                                     <button
                                         onClick={() => setCurrentPage(prev => Math.max(0, prev - 1))}
                                         disabled={currentPage === 0}
-                                        className="btn"
-                                        style={{
-                                            padding: '0.5rem 1rem',
-                                            opacity: currentPage === 0 ? 0.5 : 1,
-                                            cursor: currentPage === 0 ? 'not-allowed' : 'pointer'
-                                        }}
+                                        className="pagination-btn"
                                     >
                                         ‹ Prev
                                     </button>
 
-                                    {/* Page numbers */}
                                     <div style={{ display: 'flex', gap: '0.25rem', flexWrap: 'wrap', justifyContent: 'center' }}>
                                         {[...Array(totalPages)].map((_, index) => {
-                                            // Show only relevant pages on mobile
                                             if (totalPages > 7) {
                                                 if (
                                                     index === 0 ||
@@ -229,36 +240,21 @@ function HomePage() {
                                                         <button
                                                             key={index}
                                                             onClick={() => setCurrentPage(index)}
-                                                            className="btn"
-                                                            style={{
-                                                                padding: '0.5rem 0.75rem',
-                                                                minWidth: '40px',
-                                                                background: currentPage === index ? 'var(--primary)' : 'white',
-                                                                color: currentPage === index ? 'white' : 'var(--text)',
-                                                                fontWeight: currentPage === index ? 'bold' : 'normal'
-                                                            }}
+                                                            className={`pagination-btn ${currentPage === index ? 'active' : ''}`}
                                                         >
                                                             {index + 1}
                                                         </button>
                                                     )
                                                 } else if (index === currentPage - 2 || index === currentPage + 2) {
-                                                    return <span key={index} style={{ padding: '0.5rem' }}>...</span>
+                                                    return <span key={index} style={{ padding: '0.5rem', color: 'var(--text-muted)' }}>...</span>
                                                 }
                                                 return null
                                             }
-                                            // Show all pages if 7 or fewer
                                             return (
                                                 <button
                                                     key={index}
                                                     onClick={() => setCurrentPage(index)}
-                                                    className="btn"
-                                                    style={{
-                                                        padding: '0.5rem 0.75rem',
-                                                        minWidth: '40px',
-                                                        background: currentPage === index ? 'var(--primary)' : 'white',
-                                                        color: currentPage === index ? 'white' : 'var(--text)',
-                                                        fontWeight: currentPage === index ? 'bold' : 'normal'
-                                                    }}
+                                                    className={`pagination-btn ${currentPage === index ? 'active' : ''}`}
                                                 >
                                                     {index + 1}
                                                 </button>
@@ -269,12 +265,7 @@ function HomePage() {
                                     <button
                                         onClick={() => setCurrentPage(prev => Math.min(totalPages - 1, prev + 1))}
                                         disabled={currentPage === totalPages - 1}
-                                        className="btn"
-                                        style={{
-                                            padding: '0.5rem 1rem',
-                                            opacity: currentPage === totalPages - 1 ? 0.5 : 1,
-                                            cursor: currentPage === totalPages - 1 ? 'not-allowed' : 'pointer'
-                                        }}
+                                        className="pagination-btn"
                                     >
                                         Next ›
                                     </button>
@@ -282,23 +273,12 @@ function HomePage() {
                                     <button
                                         onClick={() => setCurrentPage(totalPages - 1)}
                                         disabled={currentPage === totalPages - 1}
-                                        className="btn"
-                                        style={{
-                                            padding: '0.5rem 1rem',
-                                            opacity: currentPage === totalPages - 1 ? 0.5 : 1,
-                                            cursor: currentPage === totalPages - 1 ? 'not-allowed' : 'pointer'
-                                        }}
+                                        className="pagination-btn"
                                     >
                                         Last »
                                     </button>
 
-                                    <div style={{
-                                        width: '100%',
-                                        textAlign: 'center',
-                                        marginTop: '1rem',
-                                        color: 'var(--text-secondary)',
-                                        fontSize: '0.9rem'
-                                    }}>
+                                    <div className="pagination-info">
                                         Showing {startIndex + 1} - {Math.min(endIndex, totalFilteredJobs)} of {totalFilteredJobs} jobs
                                     </div>
                                 </div>
@@ -309,15 +289,13 @@ function HomePage() {
             </section>
 
             {/* Job Categories Section */}
-            <section style={{ padding: '3rem 0', background: 'var(--bg-secondary)' }}>
+            <section style={{ padding: '3rem 0' }}>
                 <div className="container">
-                    <h2 style={{ marginBottom: '1.5rem', textAlign: 'center' }}>Browse Jobs by Category</h2>
-                    <div style={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        gap: '0.75rem',
-                        justifyContent: 'center'
-                    }}>
+                    <div className="section-header">
+                        <h2>Browse Jobs by Category</h2>
+                        <p>Find opportunities in your area of expertise</p>
+                    </div>
+                    <div className="category-pills">
                         {categories.map(cat => (
                             <button
                                 key={cat.id}
@@ -325,17 +303,7 @@ function HomePage() {
                                     setSelectedCategory(cat.slug)
                                     window.scrollTo({ top: 0, behavior: 'smooth' })
                                 }}
-                                style={{
-                                    padding: '0.75rem 1.5rem',
-                                    background: selectedCategory === cat.slug ? 'var(--primary)' : 'white',
-                                    color: selectedCategory === cat.slug ? 'white' : 'var(--text)',
-                                    border: '1px solid var(--border-color)',
-                                    borderRadius: '25px',
-                                    cursor: 'pointer',
-                                    transition: 'all 0.3s ease',
-                                    fontWeight: '500',
-                                    fontSize: '0.9rem'
-                                }}
+                                className={`category-pill ${selectedCategory === cat.slug ? 'active' : ''}`}
                             >
                                 {cat.name}
                             </button>
@@ -344,116 +312,51 @@ function HomePage() {
                 </div>
             </section>
 
-            {/* Blog Categories Section */}
+            {/* Blog / Career Resources Section */}
             <section style={{ padding: '3rem 0' }}>
                 <div className="container">
-                    <h2 style={{ marginBottom: '1.5rem', textAlign: 'center' }}>Career Resources</h2>
-                    <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>
-                        Explore our blog for career tips, interview guides, and industry insights
-                    </p>
-                    <div style={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        gap: '0.75rem',
-                        justifyContent: 'center'
-                    }}>
+                    <div className="section-header">
+                        <h2>Career Resources</h2>
+                        <p>Explore our blog for career tips, interview guides, and industry insights</p>
+                    </div>
+                    <div className="category-pills">
                         <button
                             onClick={() => navigate('/blog')}
-                            style={{
-                                padding: '0.75rem 1.5rem',
-                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '25px',
-                                cursor: 'pointer',
-                                fontWeight: '500',
-                                fontSize: '0.9rem'
-                            }}
+                            className="category-pill active"
                         >
                             📚 All Articles
                         </button>
-                        <button
-                            onClick={() => navigate('/blog')}
-                            style={{
-                                padding: '0.75rem 1.5rem',
-                                background: 'white',
-                                color: 'var(--text)',
-                                border: '1px solid var(--border-color)',
-                                borderRadius: '25px',
-                                cursor: 'pointer',
-                                fontWeight: '500',
-                                fontSize: '0.9rem'
-                            }}
-                        >
+                        <button onClick={() => navigate('/blog')} className="category-pill">
                             💼 Career Tips
                         </button>
-                        <button
-                            onClick={() => navigate('/blog')}
-                            style={{
-                                padding: '0.75rem 1.5rem',
-                                background: 'white',
-                                color: 'var(--text)',
-                                border: '1px solid var(--border-color)',
-                                borderRadius: '25px',
-                                cursor: 'pointer',
-                                fontWeight: '500',
-                                fontSize: '0.9rem'
-                            }}
-                        >
+                        <button onClick={() => navigate('/blog')} className="category-pill">
                             🎯 Interview Guides
                         </button>
-                        <button
-                            onClick={() => navigate('/blog')}
-                            style={{
-                                padding: '0.75rem 1.5rem',
-                                background: 'white',
-                                color: 'var(--text)',
-                                border: '1px solid var(--border-color)',
-                                borderRadius: '25px',
-                                cursor: 'pointer',
-                                fontWeight: '500',
-                                fontSize: '0.9rem'
-                            }}
-                        >
+                        <button onClick={() => navigate('/blog')} className="category-pill">
                             📈 Industry Insights
                         </button>
                     </div>
                 </div>
             </section>
 
-            {/* About JobFresh Section - For AdSense and User Understanding */}
-            <section style={{ padding: '3rem 0', background: 'var(--bg-secondary)' }}>
+            {/* About JobFresh Section */}
+            <section style={{ padding: '3rem 0' }}>
                 <div className="container">
-                    <h2 style={{ marginBottom: '1.5rem', textAlign: 'center' }}>About JobFresh</h2>
-                    <div style={{
-                        maxWidth: '900px',
-                        margin: '0 auto',
-                        background: 'white',
-                        borderRadius: '12px',
-                        padding: '2rem',
-                        boxShadow: '0 2px 10px rgba(0,0,0,0.05)'
-                    }}>
-                        <p style={{
-                            fontSize: '1.1rem',
-                            lineHeight: '1.8',
-                            color: 'var(--text-secondary)',
-                            marginBottom: '1.5rem'
-                        }}>
+                    <div className="section-header">
+                        <h2>About JobFresh</h2>
+                    </div>
+                    <div className="about-card">
+                        <p style={{ marginBottom: '1.5rem' }}>
                             <strong>JobFresh</strong> is India's premier job portal designed specifically for
                             tech professionals and freshers looking to start or advance their careers in the
                             IT industry. We connect talented individuals with top companies like Google,
                             Microsoft, Amazon, TCS, Infosys, and many more.
                         </p>
 
-                        <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: 'var(--text)' }}>
+                        <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>
                             What We Offer
                         </h3>
-                        <ul style={{
-                            lineHeight: '1.8',
-                            color: 'var(--text-secondary)',
-                            paddingLeft: '1.5rem',
-                            marginBottom: '1.5rem'
-                        }}>
+                        <ul style={{ marginBottom: '1.5rem' }}>
                             <li><strong>Curated Job Listings:</strong> Hand-picked tech job opportunities from verified companies</li>
                             <li><strong>Multiple Categories:</strong> Software Development, Frontend, Backend, DevOps, Cloud, Data Science, and more</li>
                             <li><strong>Career Resources:</strong> Interview tips, career guides, and industry insights through our blog</li>
@@ -461,14 +364,10 @@ function HomePage() {
                             <li><strong>Free Access:</strong> Browse and apply to all jobs completely free of charge</li>
                         </ul>
 
-                        <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem', color: 'var(--text)' }}>
+                        <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>
                             Who Is JobFresh For?
                         </h3>
-                        <p style={{
-                            lineHeight: '1.8',
-                            color: 'var(--text-secondary)',
-                            marginBottom: '1rem'
-                        }}>
+                        <p style={{ marginBottom: '1rem' }}>
                             JobFresh is perfect for <strong>freshers</strong> looking for their first job,
                             <strong> experienced professionals</strong> seeking new opportunities, and
                             <strong> students</strong> exploring career options in the tech industry.
@@ -480,9 +379,9 @@ function HomePage() {
                             textAlign: 'center',
                             marginTop: '1.5rem',
                             paddingTop: '1.5rem',
-                            borderTop: '1px solid var(--border-color)'
+                            borderTop: '1px solid var(--border)'
                         }}>
-                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
                                 Start your job search today — it's completely free!
                             </p>
                         </div>
