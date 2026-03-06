@@ -7,6 +7,7 @@ import { cache, CACHE_KEYS } from '../utils/cache'
 function HomePage() {
     const [jobs, setJobs] = useState([])
     const [categories, setCategories] = useState([])
+    const [companies, setCompanies] = useState([])
     const [loading, setLoading] = useState(true)
     const [searchTerm, setSearchTerm] = useState('')
     const [selectedCategory, setSelectedCategory] = useState('')
@@ -26,6 +27,7 @@ function HomePage() {
     useEffect(() => {
         fetchJobs()
         fetchCategories()
+        fetchCompanies()
     }, [])
 
     const fetchJobs = async () => {
@@ -67,6 +69,15 @@ function HomePage() {
         }
     }
 
+    const fetchCompanies = async () => {
+        try {
+            const response = await axios.get('https://api.jobfresh.in/api/companies/all')
+            setCompanies(response.data)
+        } catch (error) {
+            console.error('Error fetching companies:', error)
+        }
+    }
+
     const filteredJobs = jobs.filter(job => {
         const matchesSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             job.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -92,7 +103,20 @@ function HomePage() {
         return `${formatLPA(min)} - ${formatLPA(max)}`
     }
 
+    // Build a map of company name -> logoUrl from fetched companies
+    const companyLogoMap = {}
+    companies.forEach(c => {
+        if (c.logoUrl) {
+            companyLogoMap[c.name] = c.logoUrl
+        }
+    })
+
     const getCompanyLogo = (companyName) => {
+        // Use real logo from company data if available
+        if (companyLogoMap[companyName]) {
+            return companyLogoMap[companyName]
+        }
+        // Fallback: generate avatar from company initials
         const encoded = encodeURIComponent(companyName)
         return `https://ui-avatars.com/api/?name=${encoded}&background=1a1a2e&color=00d4aa&size=80&bold=true&format=svg`
     }
@@ -181,6 +205,12 @@ function HomePage() {
                                                     alt={job.companyName}
                                                     className="job-card-logo"
                                                     loading="lazy"
+                                                    onError={(e) => {
+                                                        const fallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(job.companyName)}&background=1a1a2e&color=00d4aa&size=80&bold=true&format=svg`
+                                                        if (e.target.src !== fallback) {
+                                                            e.target.src = fallback
+                                                        }
+                                                    }}
                                                 />
                                                 <div>
                                                     <h3 className="job-title">{job.title}</h3>
