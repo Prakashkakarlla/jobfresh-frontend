@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { SkeletonJobDetails } from '../components/Skeleton'
-import { cache, CACHE_KEYS } from '../utils/cache'
 
 function JobDetailsPage() {
     const { slug } = useParams()
@@ -34,23 +33,11 @@ function JobDetailsPage() {
             setJob(response.data)
             setLoading(false)
 
-            console.log('Job data:', response.data)
-
-            // Detail API returns company and category as objects with slug field
             const companySlug = response.data.company?.slug
             const categorySlug = response.data.category?.slug
 
-            console.log('Company slug:', companySlug, 'Category slug:', categorySlug)
-
-            // Fetch full company and category details
-            if (companySlug) {
-                fetchCompanyDetails(companySlug)
-            }
-            if (categorySlug) {
-                fetchCategoryDetails(categorySlug)
-            }
-
-            // Fetch related jobs
+            if (companySlug) fetchCompanyDetails(companySlug)
+            if (categorySlug) fetchCategoryDetails(categorySlug)
             if (categorySlug || response.data.company?.name) {
                 fetchRelatedJobs(response.data.id, categorySlug, response.data.company?.name)
             }
@@ -64,12 +51,7 @@ function JobDetailsPage() {
         try {
             const response = await axios.get('https://api.jobfresh.in/api/companies/all')
             const foundCompany = response.data.find(c => c.slug === companySlug)
-            if (foundCompany) {
-                console.log('Found company:', foundCompany)
-                setCompany(foundCompany)
-            } else {
-                console.log('Company not found for slug:', companySlug)
-            }
+            if (foundCompany) setCompany(foundCompany)
         } catch (error) {
             console.error('Error fetching company details:', error)
         }
@@ -79,12 +61,7 @@ function JobDetailsPage() {
         try {
             const response = await axios.get('https://api.jobfresh.in/api/categories/all')
             const foundCategory = response.data.find(c => c.slug === categorySlug)
-            if (foundCategory) {
-                console.log('Found category:', foundCategory)
-                setCategory(foundCategory)
-            } else {
-                console.log('Category not found for slug:', categorySlug)
-            }
+            if (foundCategory) setCategory(foundCategory)
         } catch (error) {
             console.error('Error fetching category details:', error)
         }
@@ -92,18 +69,12 @@ function JobDetailsPage() {
 
     const fetchRelatedJobs = async (currentJobId, categorySlug, companyName) => {
         try {
-            console.log('Fetching related jobs for:', { currentJobId, categorySlug, companyName })
             const response = await axios.get('https://api.jobfresh.in/api/jobs?size=100')
             const allJobs = response.data.content
-            console.log('Total jobs fetched:', allJobs.length)
-
-            // Filter to get related jobs (same category or same company, exclude current job)
             const related = allJobs
-                .filter(j => j.id !== currentJobId) // Exclude current job
-                .filter(j => j.categorySlug === categorySlug || j.companyName === companyName) // Same category or company
-                .slice(0, 4) // Limit to 4 related jobs
-
-            console.log('Related jobs found:', related.length, related)
+                .filter(j => j.id !== currentJobId)
+                .filter(j => j.categorySlug === categorySlug || j.companyName === companyName)
+                .slice(0, 4)
             setRelatedJobs(related)
         } catch (error) {
             console.error('Error fetching related jobs:', error)
@@ -111,21 +82,23 @@ function JobDetailsPage() {
     }
 
     const formatSalary = (min, max) => {
-        const formatLPA = (amount) => {
-            return `₹${(amount / 100000).toFixed(0)} LPA`
-        }
+        const formatLPA = (amount) => `₹${(amount / 100000).toFixed(0)} LPA`
         return `${formatLPA(min)} - ${formatLPA(max)}`
     }
 
     const handleApply = () => {
-        if (job.applicationLink) {
-            window.open(job.applicationLink, '_blank')
-        }
+        if (job.applicationLink) window.open(job.applicationLink, '_blank')
+    }
+
+    const getCompanyLogoUrl = () => {
+        if (company?.logoUrl) return company.logoUrl
+        const name = job?.company?.name || job?.companyName || 'Company'
+        return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1a1a2e&color=00d4aa&size=200&bold=true&format=svg`
     }
 
     if (loading) {
         return (
-            <div className="job-details">
+            <div className="jd-page">
                 <div className="container">
                     <SkeletonJobDetails />
                 </div>
@@ -135,376 +108,302 @@ function JobDetailsPage() {
 
     if (!job) {
         return (
-            <div className="container" style={{ padding: '4rem 0', textAlign: 'center' }}>
-                <h2>Job not found</h2>
-                <button className="btn btn-primary" onClick={() => navigate('/')}>
-                    Back to Jobs
-                </button>
+            <div className="jd-page">
+                <div className="container" style={{ padding: '4rem 1rem', textAlign: 'center' }}>
+                    <h2>Job not found</h2>
+                    <p style={{ color: 'var(--text-secondary)', margin: '1rem 0 2rem' }}>This job may have been removed or the link is incorrect.</p>
+                    <button className="btn btn-primary" onClick={() => navigate('/')}>
+                        Browse All Jobs
+                    </button>
+                </div>
             </div>
         )
     }
 
+    const companyName = job.company?.name || job.companyName || ''
+    const postedDate = job.postedAt ? new Date(job.postedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : null
+
     return (
-        <div className="job-details">
+        <div className="jd-page">
+            {/* Hero Banner with Company Logo */}
+            <div className="jd-hero">
+                <div className="jd-hero-bg">
+                    <img
+                        src={getCompanyLogoUrl()}
+                        alt={companyName}
+                        className="jd-hero-logo"
+                        onError={(e) => {
+                            const fallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(companyName)}&background=1a1a2e&color=00d4aa&size=200&bold=true&format=svg`
+                            if (e.target.src !== fallback) e.target.src = fallback
+                        }}
+                    />
+                </div>
+                <div className="jd-hero-overlay"></div>
+            </div>
+
             <div className="container">
-                <button
-                    onClick={() => navigate('/')}
-                    style={{
-                        background: 'none',
-                        border: 'none',
-                        color: 'var(--primary)',
-                        cursor: 'pointer',
-                        fontSize: '1rem',
-                        marginBottom: '1.5rem',
-                        padding: '0.5rem 0'
-                    }}
-                >
+                {/* Back button */}
+                <button onClick={() => navigate('/')} className="jd-back-btn">
                     ← Back to all jobs
                 </button>
 
-                {/* Two-column layout: Main content + Sidebar */}
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: relatedJobs.length > 0 ? '1fr 350px' : '1fr',
-                    gap: '2rem'
-                }}>
-                    {/* Main content */}
-                    <div className="job-details-card fade-in">
-                        <div style={{ marginBottom: '2rem' }}>
-                            <h1>{job.title}</h1>
-
-                            {/* Company info with logo */}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                                {company?.logoUrl && (
-                                    <img
-                                        src={company.logoUrl}
-                                        alt={job.companyName}
-                                        style={{ width: '60px', height: '60px', objectFit: 'contain', borderRadius: '8px', border: '1px solid #e5e7eb' }}
-                                    />
-                                )}
-                                <p style={{ fontSize: '1.25rem', color: 'var(--text-secondary)', margin: 0 }}>
-                                    {job.companyName}
-                                </p>
-                            </div>
-
-                            <div className="job-meta" style={{ marginBottom: '1.5rem' }}>
-                                <span className="meta-item">📍 {job.location}</span>
-                                <span className="meta-item">💼 {job.jobType}</span>
-                                <span className="meta-item">🏢 {job.workMode}</span>
-                                {job.remote && <span className="badge badge-success">Remote Available</span>}
-                            </div>
-
-                            {/* Salary from compensation object or direct fields */}
-                            {(job.compensation?.salaryMin || job.salaryMin) && (
-                                <div className="salary" style={{ fontSize: '1.5rem', marginBottom: '1.5rem', fontWeight: '700', color: 'var(--primary)' }}>
-                                    💰 {formatSalary(
-                                        job.compensation?.salaryMin || job.salaryMin,
-                                        job.compensation?.salaryMax || job.salaryMax
-                                    )}
-                                </div>
-                            )}
-
-                            <button
-                                className="btn btn-primary"
-                                onClick={handleApply}
-                                style={{ fontSize: '1.125rem', padding: '1rem 2.5rem' }}
-                            >
-                                Apply Now
-                            </button>
-                        </div>
-
-                        {/* Company Information Section */}
-                        {company && company.about && (
-                            <div className="job-section" style={{ background: 'var(--bg-elevated)', padding: '1.5rem', borderRadius: '12px', border: '1px solid var(--border)' }}>
-                                <h2>About {company.name}</h2>
-                                <p>{company.about}</p>
-                                {company.website && (
-                                    <p style={{ marginTop: '1rem' }}>
-                                        <strong>Website:</strong>{' '}
-                                        <a href={company.website} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)' }}>
-                                            {company.website}
-                                        </a>
-                                    </p>
-                                )}
-                            </div>
-                        )}
-
-                        {/* Category Information Section */}
-                        {category && (
-                            <>
-                                {category.introText && (
-                                    <div className="job-section">
-                                        <h2>About {category.name} Jobs</h2>
-                                        <p>{category.introText}</p>
-                                    </div>
-                                )}
-
-                                {category.careerGuide && (
-                                    <div className="job-section">
-                                        <h2>Career Guide: {category.name}</h2>
-                                        <p style={{ whiteSpace: 'pre-line' }}>{category.careerGuide}</p>
-                                    </div>
-                                )}
-
-                                {category.faq && (
-                                    <div className="job-section">
-                                        <h2>Frequently Asked Questions</h2>
-                                        <p style={{ whiteSpace: 'pre-line' }}>{category.faq}</p>
-                                    </div>
-                                )}
-                            </>
-                        )}
-
-                        {job.roleSummary && (
-                            <div className="job-section">
-                                <h2>About the Role</h2>
-                                <p>{job.roleSummary}</p>
-                            </div>
-                        )}
-
-                        {job.responsibilities && (
-                            <div className="job-section">
-                                <h2>Responsibilities</h2>
-                                <ul>
-                                    {job.responsibilities.split('\n').map((resp, index) => (
-                                        <li key={index}>{resp}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
-
-                        {job.mustHaveSkills && (
-                            <div className="job-section">
-                                <h2>Required Skills</h2>
-                                <p>{job.mustHaveSkills}</p>
-                            </div>
-                        )}
-
-                        {job.niceToHaveSkills && (
-                            <div className="job-section">
-                                <h2>Nice to Have</h2>
-                                <p>{job.niceToHaveSkills}</p>
-                            </div>
-                        )}
-
-                        {job.benefitsSummary && (
-                            <div className="job-section">
-                                <h2>Benefits</h2>
-                                <p>{job.benefitsSummary}</p>
-                            </div>
-                        )}
-
-                        {(job.eligibleBatch || job.qualification || job.experienceLevel || job.lastDateToApply) && (
-                            <div className="job-section">
-                                <h2>Eligibility Information</h2>
-                                {job.eligibleBatch && <p><strong>Eligible Batch:</strong> {job.eligibleBatch}</p>}
-                                {job.qualification && <p><strong>Qualification:</strong> {job.qualification}</p>}
-                                {job.experienceLevel && <p><strong>Experience:</strong> {job.experienceLevel}</p>}
-                                {job.lastDateToApply && <p><strong>Last Date to Apply:</strong> {new Date(job.lastDateToApply).toLocaleDateString()}</p>}
-                            </div>
-                        )}
-
-                        {job.eligibilityCriteria && (
-                            <div className="job-section">
-                                <h2>Eligibility Criteria</h2>
-                                <ul>
-                                    {job.eligibilityCriteria.split('\n').filter(c => c.trim()).map((criteria, index) => (
-                                        <li key={index}>{criteria}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
-
-                        {job.selectionProcess && (
-                            <div className="job-section">
-                                <h2>Selection Process</h2>
-                                <ul>
-                                    {job.selectionProcess.split('\n').filter(s => s.trim()).map((stage, index) => (
-                                        <li key={index}>{stage}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
-
-                        {job.interviewTips && (
-                            <div className="job-section">
-                                <h2>Interview Tips</h2>
-                                <ul>
-                                    {job.interviewTips.split('\n').filter(t => t.trim()).map((tip, index) => (
-                                        <li key={index}>{tip}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
-
-                        {job.careerGrowthInfo && (
-                            <div className="job-section">
-                                <h2>Career Growth</h2>
-                                <p>{job.careerGrowthInfo}</p>
-                                {job.futureRoles && (
-                                    <p style={{ marginTop: '1rem' }}>
-                                        <strong>Possible Future Roles:</strong> {job.futureRoles}
-                                    </p>
-                                )}
-                            </div>
-                        )}
-
-                        <div className="job-section">
-                            <h2>How to Apply</h2>
-                            <p>Click the "Apply Now" button above to be redirected to the company's application page.</p>
-                            <button
-                                className="btn btn-primary"
-                                onClick={handleApply}
-                                style={{ marginTop: '1rem' }}
-                            >
-                                Apply for this position
-                            </button>
-                        </div>
+                {/* Job Title Card */}
+                <div className="jd-title-card fade-in">
+                    <div className="jd-title-top">
+                        <h1 className="jd-title">{job.title}</h1>
+                        <p className="jd-company">{companyName}</p>
                     </div>
-                    {/* End main content */}
 
-                    {/* Related Jobs Sidebar */}
-                    {relatedJobs.length > 0 && (
-                        <div className="related-jobs-sidebar">
-                            <div style={{
-                                background: 'var(--bg-card)',
-                                padding: '1.5rem',
-                                borderRadius: '16px',
-                                border: '1px solid var(--border)'
-                            }}>
-                                <h3 style={{
-                                    marginBottom: '1.5rem',
-                                    fontSize: '1.25rem',
-                                    fontWeight: '600'
-                                }}>
-                                    Related Jobs
-                                </h3>
-                                <div style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: '1rem'
-                                }}>
-                                    {relatedJobs.map(relatedJob => (
-                                        <div
-                                            key={relatedJob.id}
-                                            onClick={() => {
-                                                window.scrollTo(0, 0)
-                                                navigate(`/jobs/${relatedJob.slug}`)
-                                            }}
-                                            style={{
-                                                padding: '1rem',
-                                                border: '1px solid var(--border)',
-                                                borderRadius: '12px',
-                                                cursor: 'pointer',
-                                                transition: 'all 0.3s',
-                                                background: 'var(--bg-elevated)'
-                                            }}
-                                            onMouseEnter={(e) => {
-                                                e.currentTarget.style.background = 'var(--bg-card-hover)'
-                                                e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 212, 170, 0.1)'
-                                                e.currentTarget.style.borderColor = 'var(--primary)'
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                e.currentTarget.style.background = 'var(--bg-elevated)'
-                                                e.currentTarget.style.boxShadow = 'none'
-                                                e.currentTarget.style.borderColor = 'var(--border)'
-                                            }}
-                                        >
-                                            <h4 style={{
-                                                fontSize: '0.95rem',
-                                                marginBottom: '0.5rem',
-                                                fontWeight: '600',
-                                                lineHeight: '1.3'
-                                            }}>
-                                                {relatedJob.title}
-                                            </h4>
-                                            <p style={{
-                                                fontSize: '0.85rem',
-                                                color: 'var(--text-secondary)',
-                                                marginBottom: '0.5rem'
-                                            }}>
-                                                {relatedJob.companyName}
-                                            </p>
-                                            <div style={{
-                                                fontSize: '0.75rem',
-                                                color: 'var(--text-secondary)',
-                                                marginBottom: '0.5rem'
-                                            }}>
-                                                📍 {relatedJob.location}
-                                            </div>
-                                            <span className="badge badge-primary" style={{ fontSize: '0.7rem' }}>
-                                                {relatedJob.categoryName}
-                                            </span>
-                                        </div>
-                                    ))}
-                                </div>
+                    <div className="jd-quick-info">
+                        <span className="jd-info-chip">📍 {job.location}</span>
+                        <span className="jd-info-chip">💼 {job.jobType}</span>
+                        {job.workMode && <span className="jd-info-chip">🏢 {job.workMode}</span>}
+                        {job.remote && <span className="jd-info-chip jd-chip-highlight">🌐 Remote</span>}
+                        {postedDate && <span className="jd-info-chip">📅 {postedDate}</span>}
+                    </div>
+
+                    {(job.compensation?.salaryMin || job.salaryMin) && (
+                        <div className="jd-salary">
+                            💰 {formatSalary(
+                                job.compensation?.salaryMin || job.salaryMin,
+                                job.compensation?.salaryMax || job.salaryMax
+                            )}
+                        </div>
+                    )}
+
+                    <div className="jd-badges">
+                        <span className="badge badge-primary">{job.category?.name || job.categoryName}</span>
+                        {job.experienceLevel && <span className="badge badge-secondary">{job.experienceLevel}</span>}
+                        {job.eligibleBatch && <span className="badge badge-secondary">Batch: {job.eligibleBatch}</span>}
+                    </div>
+                </div>
+
+                {/* Content Sections */}
+                <div className="jd-content fade-in">
+
+                    {/* About the Role */}
+                    {job.roleSummary && (
+                        <div className="jd-section">
+                            <h2 className="jd-section-title">📋 About the Role</h2>
+                            <p className="jd-section-text">{job.roleSummary}</p>
+                        </div>
+                    )}
+
+                    {/* Responsibilities */}
+                    {job.responsibilities && (
+                        <div className="jd-section">
+                            <h2 className="jd-section-title">🎯 Responsibilities</h2>
+                            <ul className="jd-list">
+                                {job.responsibilities.split('\n').filter(r => r.trim()).map((resp, i) => (
+                                    <li key={i}>{resp}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    {/* Required Skills */}
+                    {job.mustHaveSkills && (
+                        <div className="jd-section">
+                            <h2 className="jd-section-title">⚡ Required Skills</h2>
+                            <p className="jd-section-text">{job.mustHaveSkills}</p>
+                        </div>
+                    )}
+
+                    {/* Nice to Have */}
+                    {job.niceToHaveSkills && (
+                        <div className="jd-section">
+                            <h2 className="jd-section-title">✨ Nice to Have</h2>
+                            <p className="jd-section-text">{job.niceToHaveSkills}</p>
+                        </div>
+                    )}
+
+                    {/* Eligibility */}
+                    {(job.qualification || job.lastDateToApply) && (
+                        <div className="jd-section jd-section-highlight">
+                            <h2 className="jd-section-title">🎓 Eligibility</h2>
+                            <div className="jd-info-grid">
+                                {job.qualification && (
+                                    <div className="jd-info-item">
+                                        <span className="jd-info-label">Qualification</span>
+                                        <span className="jd-info-value">{job.qualification}</span>
+                                    </div>
+                                )}
+                                {job.experienceLevel && (
+                                    <div className="jd-info-item">
+                                        <span className="jd-info-label">Experience</span>
+                                        <span className="jd-info-value">{job.experienceLevel}</span>
+                                    </div>
+                                )}
+                                {job.eligibleBatch && (
+                                    <div className="jd-info-item">
+                                        <span className="jd-info-label">Eligible Batch</span>
+                                        <span className="jd-info-value">{job.eligibleBatch}</span>
+                                    </div>
+                                )}
+                                {job.lastDateToApply && (
+                                    <div className="jd-info-item">
+                                        <span className="jd-info-label">Last Date</span>
+                                        <span className="jd-info-value jd-deadline">{new Date(job.lastDateToApply).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )}
-                </div>
-                {/* End grid container */}
 
-                {/* Explore More Section */}
-                <section style={{ padding: '3rem 0', marginTop: '2rem', background: 'var(--bg-card)', borderRadius: '16px', border: '1px solid var(--border)' }}>
-                    <div className="container">
-                        <h2 style={{ marginBottom: '1.5rem', textAlign: 'center' }}>Explore More Opportunities</h2>
+                    {/* Eligibility Criteria */}
+                    {job.eligibilityCriteria && (
+                        <div className="jd-section">
+                            <h2 className="jd-section-title">📝 Eligibility Criteria</h2>
+                            <ul className="jd-list">
+                                {job.eligibilityCriteria.split('\n').filter(c => c.trim()).map((criteria, i) => (
+                                    <li key={i}>{criteria}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
 
-                        {/* Job Categories */}
-                        <div style={{ marginBottom: '2rem' }}>
-                            <h3 style={{ marginBottom: '1rem', textAlign: 'center', fontSize: '1.1rem', color: 'var(--text-secondary)' }}>
-                                Browse by Category
-                            </h3>
-                            <div style={{
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                gap: '0.5rem',
-                                justifyContent: 'center'
-                            }}>
-                                {allCategories.map(cat => (
-                                    <button
-                                        key={cat.id}
-                                        onClick={() => navigate(`/?category=${cat.slug}`)}
-                                        className="category-pill"
-                                        style={{
-                                            padding: '0.5rem 1rem',
-                                            borderRadius: '20px',
-                                            cursor: 'pointer',
-                                            fontSize: '0.85rem'
-                                        }}
-                                    >
-                                        {cat.name}
-                                    </button>
+                    {/* Selection Process */}
+                    {job.selectionProcess && (
+                        <div className="jd-section">
+                            <h2 className="jd-section-title">🔄 Selection Process</h2>
+                            <div className="jd-steps">
+                                {job.selectionProcess.split('\n').filter(s => s.trim()).map((stage, i) => (
+                                    <div className="jd-step" key={i}>
+                                        <div className="jd-step-num">{i + 1}</div>
+                                        <span>{stage}</span>
+                                    </div>
                                 ))}
                             </div>
                         </div>
+                    )}
 
-                        {/* Blog Resources */}
-                        <div>
-                            <h3 style={{ marginBottom: '1rem', textAlign: 'center', fontSize: '1.1rem', color: 'var(--text-secondary)' }}>
-                                Career Resources
-                            </h3>
-                            <div style={{
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                gap: '0.5rem',
-                                justifyContent: 'center'
-                            }}>
-                                <button onClick={() => navigate('/blog')} className="category-pill active" style={{ padding: '0.5rem 1rem' }}>
-                                    📚 All Articles
-                                </button>
-                                <button onClick={() => navigate('/blog')} className="category-pill" style={{ padding: '0.5rem 1rem' }}>
-                                    💡 Career Tips
-                                </button>
-                                <button onClick={() => navigate('/blog')} className="category-pill" style={{ padding: '0.5rem 1rem' }}>
-                                    🎯 Interview Prep
-                                </button>
-                                <button onClick={() => navigate('/blog')} className="category-pill" style={{ padding: '0.5rem 1rem' }}>
-                                    📝 Resume Tips
-                                </button>
-                            </div>
+                    {/* Interview Tips */}
+                    {job.interviewTips && (
+                        <div className="jd-section jd-section-highlight">
+                            <h2 className="jd-section-title">💡 Interview Tips</h2>
+                            <ul className="jd-list jd-tips">
+                                {job.interviewTips.split('\n').filter(t => t.trim()).map((tip, i) => (
+                                    <li key={i}>{tip}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    {/* Benefits */}
+                    {job.compensation?.benefitsSummary && (
+                        <div className="jd-section">
+                            <h2 className="jd-section-title">🎁 Benefits & Perks</h2>
+                            <p className="jd-section-text">{job.compensation.benefitsSummary}</p>
+                            {job.compensation.additionalPerks && (
+                                <p className="jd-section-text" style={{ marginTop: '0.75rem' }}>{job.compensation.additionalPerks}</p>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Career Growth */}
+                    {job.careerGrowthInfo && (
+                        <div className="jd-section">
+                            <h2 className="jd-section-title">📈 Career Growth</h2>
+                            <p className="jd-section-text">{job.careerGrowthInfo}</p>
+                            {job.futureRoles && (
+                                <p className="jd-section-text" style={{ marginTop: '0.75rem' }}>
+                                    <strong>Possible Future Roles:</strong> {job.futureRoles}
+                                </p>
+                            )}
+                        </div>
+                    )}
+
+                    {/* About Company */}
+                    {company && company.about && (
+                        <div className="jd-section jd-company-section">
+                            <h2 className="jd-section-title">🏢 About {company.name}</h2>
+                            <p className="jd-section-text">{company.about}</p>
+                            {company.workCulture && (
+                                <>
+                                    <h3 className="jd-subsection-title">Work Culture</h3>
+                                    <p className="jd-section-text">{company.workCulture}</p>
+                                </>
+                            )}
+                            {company.website && (
+                                <a href={company.website} target="_blank" rel="noopener noreferrer" className="jd-company-link">
+                                    🌐 Visit {company.name} Website →
+                                </a>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Category Info */}
+                    {category && category.introText && (
+                        <div className="jd-section">
+                            <h2 className="jd-section-title">📂 About {category.name} Jobs</h2>
+                            <p className="jd-section-text">{category.introText}</p>
+                        </div>
+                    )}
+
+                    {category && category.careerGuide && (
+                        <div className="jd-section">
+                            <h2 className="jd-section-title">🗺️ Career Guide: {category.name}</h2>
+                            <p className="jd-section-text" style={{ whiteSpace: 'pre-line' }}>{category.careerGuide}</p>
+                        </div>
+                    )}
+
+                    {category && category.faq && (
+                        <div className="jd-section">
+                            <h2 className="jd-section-title">❓ Frequently Asked Questions</h2>
+                            <p className="jd-section-text" style={{ whiteSpace: 'pre-line' }}>{category.faq}</p>
+                        </div>
+                    )}
+
+                    {/* ===== APPLY BUTTON (ONLY AT BOTTOM) ===== */}
+                    <div className="jd-apply-section">
+                        <div className="jd-apply-inner">
+                            <h2>Ready to Apply?</h2>
+                            <p>Don't miss this opportunity at <strong>{companyName}</strong></p>
+                            <button className="jd-apply-btn" onClick={handleApply}>
+                                🚀 Apply Now
+                            </button>
+                            <span className="jd-apply-hint">You'll be redirected to the company's application page</span>
                         </div>
                     </div>
-                </section>
+                </div>
+
+                {/* Related Jobs */}
+                {relatedJobs.length > 0 && (
+                    <div className="jd-related fade-in">
+                        <h2 className="jd-related-title">Similar Openings</h2>
+                        <div className="jd-related-grid">
+                            {relatedJobs.map(rj => (
+                                <div
+                                    key={rj.id}
+                                    className="jd-related-card"
+                                    onClick={() => {
+                                        window.scrollTo(0, 0)
+                                        navigate(`/jobs/${rj.slug}`)
+                                    }}
+                                >
+                                    <h4 className="jd-related-card-title">{rj.title}</h4>
+                                    <p className="jd-related-card-company">{rj.companyName}</p>
+                                    <div className="jd-related-card-meta">
+                                        <span>📍 {rj.location}</span>
+                                        <span className="badge badge-primary" style={{ fontSize: '0.7rem' }}>{rj.categoryName}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Explore More Categories */}
+                <div className="jd-explore fade-in">
+                    <h2>Explore More Opportunities</h2>
+                    <div className="jd-explore-pills">
+                        {allCategories.map(cat => (
+                            <button key={cat.id} onClick={() => navigate(`/?category=${cat.slug}`)} className="category-pill">
+                                {cat.name}
+                            </button>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     )

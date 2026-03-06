@@ -761,6 +761,406 @@ body {
   color: var(--text-muted);
 }
 
+/* ==================== JOB DETAILS PAGE ==================== */
+.jd-page {
+  padding-bottom: 2rem;
+}
+
+.jd-hero {
+  width: 100%;
+  height: 280px;
+  position: relative;
+  overflow: hidden;
+}
+
+.jd-hero-bg {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 50%, #13131a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jd-hero-logo {
+  max-width: 200px;
+  max-height: 160px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 30px rgba(0, 212, 170, 0.15));
+}
+
+.jd-hero-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to top, var(--bg), transparent);
+}
+
+.jd-back-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-family: inherit;
+  font-weight: 500;
+  padding: 0.75rem 0;
+  margin-bottom: 0.5rem;
+  transition: opacity 0.2s;
+}
+
+.jd-back-btn:hover {
+  opacity: 0.8;
+}
+
+.jd-title-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.jd-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.jd-company {
+  font-size: 1.15rem;
+  color: var(--primary);
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+
+.jd-quick-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.jd-info-chip {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.jd-chip-highlight {
+  background: rgba(0, 212, 170, 0.1);
+  border-color: rgba(0, 212, 170, 0.3);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.jd-salary {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 1.25rem;
+}
+
+.jd-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.jd-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.jd-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: border-color 0.3s ease;
+}
+
+.jd-section:hover {
+  border-color: var(--border-hover);
+}
+
+.jd-section-highlight {
+  background: linear-gradient(135deg, rgba(0, 212, 170, 0.04), rgba(108, 92, 231, 0.04));
+  border-color: rgba(0, 212, 170, 0.15);
+}
+
+.jd-section-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.jd-subsection-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.5rem;
+  color: var(--text-primary);
+}
+
+.jd-section-text {
+  color: var(--text-secondary);
+  line-height: 1.8;
+  font-size: 0.95rem;
+}
+
+.jd-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.jd-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+.jd-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.jd-tips li::before {
+  content: '💡';
+}
+
+/* Info Grid for eligibility */
+.jd-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.jd-info-item {
+  background: var(--bg-elevated);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  border: 1px solid var(--border);
+}
+
+.jd-info-label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+}
+
+.jd-info-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.jd-deadline {
+  color: #f56565;
+}
+
+/* Selection Process Steps */
+.jd-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.jd-step {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.jd-step-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent-light));
+  color: #0a0a0f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+/* Company Section */
+.jd-company-section {
+  border-left: 3px solid var(--primary);
+}
+
+.jd-company-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: opacity 0.2s;
+}
+
+.jd-company-link:hover {
+  opacity: 0.8;
+}
+
+/* Apply Section (bottom only) */
+.jd-apply-section {
+  margin-top: 0.5rem;
+  background: linear-gradient(135deg, rgba(0, 212, 170, 0.08), rgba(108, 92, 231, 0.08));
+  border: 1px solid rgba(0, 212, 170, 0.2);
+  border-radius: var(--radius);
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+}
+
+.jd-apply-inner h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.jd-apply-inner p {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+.jd-apply-btn {
+  display: inline-block;
+  padding: 1rem 3rem;
+  background: linear-gradient(135deg, #00d4aa, #00c49a);
+  color: #0a0a0f;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-size: 1.15rem;
+  font-weight: 800;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 212, 170, 0.3);
+}
+
+.jd-apply-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 212, 170, 0.4);
+}
+
+.jd-apply-hint {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Related Jobs */
+.jd-related {
+  margin-top: 2.5rem;
+}
+
+.jd-related-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  color: var(--text-primary);
+}
+
+.jd-related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.jd-related-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.jd-related-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 20px rgba(0, 212, 170, 0.1);
+  transform: translateY(-3px);
+}
+
+.jd-related-card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+.jd-related-card-company {
+  font-size: 0.85rem;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.jd-related-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Explore More */
+.jd-explore {
+  margin-top: 2rem;
+  padding: 2rem 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.jd-explore h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+}
+
+.jd-explore-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
 /* ==================== RESPONSIVE ==================== */
 
 /* Tablet: 769px - 1024px */
@@ -938,6 +1338,67 @@ body {
     padding: 0.75rem 1.5rem;
     font-size: 0.95rem;
   }
+
+  /* JD Page Mobile */
+  .jd-hero {
+    height: 200px;
+  }
+
+  .jd-hero-logo {
+    max-width: 140px;
+    max-height: 120px;
+  }
+
+  .jd-title-card {
+    padding: 1.25rem;
+  }
+
+  .jd-title {
+    font-size: 1.35rem;
+  }
+
+  .jd-company {
+    font-size: 1rem;
+  }
+
+  .jd-info-chip {
+    font-size: 0.8rem;
+    padding: 0.35rem 0.6rem;
+  }
+
+  .jd-salary {
+    font-size: 1.25rem;
+  }
+
+  .jd-section {
+    padding: 1.25rem;
+  }
+
+  .jd-section-title {
+    font-size: 1.1rem;
+  }
+
+  .jd-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jd-apply-section {
+    padding: 2rem 1rem;
+  }
+
+  .jd-apply-btn {
+    padding: 0.875rem 2rem;
+    font-size: 1.05rem;
+    width: 100%;
+  }
+
+  .jd-related-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jd-explore {
+    padding: 1.5rem 1rem;
+  }
 }
 
 /* Small mobile: 480px and below */
@@ -1012,6 +1473,63 @@ body {
 
   .about-card h3 {
     font-size: 1rem;
+  }
+
+  /* JD Page Small Mobile */
+  .jd-hero {
+    height: 160px;
+  }
+
+  .jd-hero-logo {
+    max-width: 100px;
+    max-height: 90px;
+  }
+
+  .jd-title-card {
+    padding: 1rem;
+  }
+
+  .jd-title {
+    font-size: 1.2rem;
+  }
+
+  .jd-section {
+    padding: 1rem;
+  }
+
+  .jd-section-title {
+    font-size: 1rem;
+  }
+
+  .jd-section-text {
+    font-size: 0.9rem;
+  }
+
+  .jd-list li {
+    font-size: 0.9rem;
+  }
+
+  .jd-step {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .jd-step-num {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+  }
+
+  .jd-apply-inner h2 {
+    font-size: 1.2rem;
+  }
+
+  .jd-apply-inner p {
+    font-size: 0.9rem;
+  }
+
+  .jd-related-card {
+    padding: 1rem;
   }
 }
 
