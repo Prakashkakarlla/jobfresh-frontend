@@ -287,11 +287,13 @@ body {
   justify-content: center;
   position: relative;
   z-index: 1;
+  padding: 0 1rem;
 }
 
 .search-input {
   flex: 1;
-  min-width: 280px;
+  min-width: 0;
+  width: 100%;
   padding: 1rem 1.25rem 1rem 3rem;
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-pill);
@@ -319,7 +321,9 @@ body {
 
 .category-select,
 .search-select {
-  min-width: 200px;
+  min-width: 0;
+  width: 100%;
+  flex: 1;
   padding: 1rem 2.5rem 1rem 1.25rem;
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-pill);
@@ -440,7 +444,7 @@ body {
 
 .job-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
   margin-top: 2rem;
 }
@@ -455,18 +459,8 @@ body {
   border: 1px solid var(--border);
   overflow: hidden;
   position: relative;
-}
-
-.job-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--primary), var(--accent-light), var(--secondary));
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .job-card:hover {
@@ -475,29 +469,51 @@ body {
   border-color: var(--border-hover);
 }
 
-.job-card:hover::before {
-  opacity: 1;
-}
-
-.job-card-inner {
-  padding: 1.5rem;
-}
-
-.job-card-top {
+.job-card-img-wrapper {
+  width: 100%;
+  height: 180px;
+  background: linear-gradient(135deg, var(--bg-elevated) 0%, #1a1a2e 50%, var(--bg-card) 100%);
   display: flex;
-  gap: 1rem;
-  align-items: flex-start;
-  margin-bottom: 1rem;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  border-bottom: 1px solid var(--border);
+}
+
+.job-card-img-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(to top, var(--bg-card), transparent);
+  pointer-events: none;
 }
 
 .job-card-logo {
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
-  object-fit: cover;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 1.5rem;
+  background: transparent;
+  transition: transform 0.3s ease;
+}
+
+.job-card:hover .job-card-logo {
+  transform: scale(1.05);
+}
+
+.job-card-inner {
+  padding: 1.25rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.job-card-top {
+  margin-bottom: 0.75rem;
 }
 
 .job-header {
@@ -746,23 +762,104 @@ body {
 }
 
 /* ==================== RESPONSIVE ==================== */
+
+/* Tablet: 769px - 1024px */
+@media (max-width: 1024px) {
+  .job-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .job-card-img-wrapper {
+    height: 160px;
+  }
+}
+
+/* Mobile: 768px and below */
 @media (max-width: 768px) {
-  .hero h1 {
-    font-size: 2rem;
-  }
-
   .hero {
-    padding: 3rem 0 2.5rem;
+    padding: 2.5rem 0 2rem;
   }
 
-  .search-bar {
+  .hero h1 {
+    font-size: 1.75rem;
+    padding: 0 0.5rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  .search-container {
     flex-direction: column;
+    gap: 0.75rem;
+    padding: 0 0.5rem;
+  }
+
+  .search-input {
+    min-width: 0;
+    width: 100%;
+    font-size: 0.95rem;
+    padding: 0.875rem 1rem 0.875rem 2.75rem;
+  }
+
+  .category-select,
+  .search-select {
+    min-width: 0;
+    width: 100%;
+    font-size: 0.95rem;
+    padding: 0.875rem 2.5rem 0.875rem 1rem;
+  }
+
+  .stats-row {
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .stat-number {
+    font-size: 1.4rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+  }
+
+  .jobs-section {
+    padding: 2rem 0;
   }
 
   .job-grid {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
-  
+
+  .job-card-img-wrapper {
+    height: 160px;
+  }
+
+  .job-card-inner {
+    padding: 1rem;
+  }
+
+  .job-title {
+    font-size: 1.05rem;
+  }
+
+  .meta-item {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .job-meta {
+    gap: 0.5rem;
+    margin: 0.75rem 0;
+  }
+
+  .salary {
+    font-size: 1rem;
+    margin-top: 0.75rem;
+  }
+
   .blog-grid {
     grid-template-columns: 1fr;
   }
@@ -770,6 +867,151 @@ body {
   .nav {
     display: flex !important;
     gap: 0.4rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.4rem;
+  }
+
+  .section-header p {
+    font-size: 0.9rem;
+    padding: 0 0.5rem;
+  }
+
+  .category-pills {
+    gap: 0.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .category-pill {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .pagination-container {
+    gap: 0.35rem;
+    margin-top: 2rem;
+  }
+
+  .pagination-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .about-card {
+    padding: 1.25rem;
+  }
+
+  .about-card p {
+    font-size: 0.95rem;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .footer {
+    padding: 2rem 0 1rem;
+    margin-top: 2rem;
+  }
+
+  .job-details-card {
+    padding: 1.25rem;
+    border-radius: 12px;
+  }
+
+  .job-details h1 {
+    font-size: 1.5rem;
+  }
+
+  .job-details {
+    padding: 1.5rem 0;
+  }
+
+  .job-section h2 {
+    font-size: 1.2rem;
+  }
+
+  .btn-primary {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Small mobile: 480px and below */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+
+  .hero {
+    padding: 2rem 0 1.5rem;
+  }
+
+  .hero h1 {
+    font-size: 1.5rem;
+  }
+
+  .hero p {
+    font-size: 0.9rem;
+  }
+
+  .job-card-img-wrapper {
+    height: 140px;
+  }
+
+  .job-card-logo {
+    padding: 1rem;
+  }
+
+  .job-card-inner {
+    padding: 0.875rem;
+  }
+
+  .job-title {
+    font-size: 0.95rem;
+  }
+
+  .company-name {
+    font-size: 0.8rem;
+  }
+
+  .badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .footer-section h3 {
+    font-size: 1rem;
+  }
+
+  .job-details h1 {
+    font-size: 1.3rem;
+  }
+
+  .job-details-card {
+    padding: 1rem;
+  }
+
+  .category-pill {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .pagination-btn {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.75rem;
+    min-width: 32px;
+  }
+
+  .about-card {
+    padding: 1rem;
+  }
+
+  .about-card h3 {
+    font-size: 1rem;
   }
 }
 

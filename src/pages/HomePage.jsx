@@ -198,30 +198,30 @@ function HomePage() {
                                         className="job-card"
                                         onClick={() => navigate(`/jobs/${job.slug}`)}
                                     >
+                                        <div className="job-card-img-wrapper">
+                                            <img
+                                                src={getCompanyLogo(job.companyName)}
+                                                alt={job.companyName}
+                                                className="job-card-logo"
+                                                loading="lazy"
+                                                onError={(e) => {
+                                                    const fallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(job.companyName)}&background=1a1a2e&color=00d4aa&size=200&bold=true&format=svg`
+                                                    if (e.target.src !== fallback) {
+                                                        e.target.src = fallback
+                                                    }
+                                                }}
+                                            />
+                                        </div>
                                         <div className="job-card-inner">
                                             <div className="job-card-top">
-                                                <img
-                                                    src={getCompanyLogo(job.companyName)}
-                                                    alt={job.companyName}
-                                                    className="job-card-logo"
-                                                    loading="lazy"
-                                                    onError={(e) => {
-                                                        const fallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(job.companyName)}&background=1a1a2e&color=00d4aa&size=80&bold=true&format=svg`
-                                                        if (e.target.src !== fallback) {
-                                                            e.target.src = fallback
-                                                        }
-                                                    }}
-                                                />
-                                                <div>
-                                                    <h3 className="job-title">{job.title}</h3>
-                                                    <p className="company-name">{job.companyName}</p>
-                                                </div>
+                                                <h3 className="job-title">{job.title}</h3>
+                                                <p className="company-name">{job.companyName}</p>
                                             </div>
 
                                             <div className="job-meta">
                                                 <span className="meta-item">📍 {job.location}</span>
                                                 <span className="meta-item">💼 {job.jobType}</span>
-                                                <span className="meta-item">🏢 {job.workMode}</span>
+                                                {job.workMode && <span className="meta-item">🏢 {job.workMode}</span>}
                                             </div>
 
                                             <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
